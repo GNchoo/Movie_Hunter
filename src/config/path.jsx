@@ -16,7 +16,8 @@ function path() {
     <div>
       <Routes>
         <Route path="/Board" element={<Board />} />
-        <Route path="/BoardList" element={<BoardList />} />
+        <Route path="/Board/List" element={<BoardList />} />
+        <Route path="/Board/write" element={<BoardList />} />
         <Route path="/ChuChon" element={<ChuChon />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Sign" element={<Sign />} />
