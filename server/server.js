@@ -38,16 +38,6 @@ app.get("/sign", (req, res) => {
   console.log("sign request");
 });
 
-// app.post("/sign/", (req, res) => {
-//   const { username, password } = req.body;
-//   db.collection("user").insertOne({
-//     username: req.body.username,
-//     password: bcrypt.hashSync(req.body.password, saltRounds),
-//     name: req.body.name,
-//   });
-//   console.log("회원가입 완료");
-//   res.redirect("/");
-// });
 app.post("/sign", (req, res) => {
   const { username, password } = req.body;
   db.collection("user")
@@ -95,25 +85,26 @@ app.post(
   }),
   (req, res) => {
     console.log("로그인 성공");
-    res.send("로그인 성공"); // 성공하면 여기로 보내주세요
+    // res.send("로그인 성공"); // 성공하면 여기로 보내주세요
+    res.json({ username: req.body.username, name: req.body.name });
   }
 );
 
-// // mypage로 누가 요청하면 areYouLogin미들웨어 실행 후 코드실행
-// app.get("/mypage", areYouLogin, (req, res) => {
-//   console.log(req.user); // 여기에 데이터 있음
-//   res.render("mypage.ejs", { 사용자: req.user });
-// });
+// mypage로 누가 요청하면 areYouLogin미들웨어 실행 후 코드실행
+app.get("/mypage", areYouLogin, (req, res) => {
+  console.log(req.user); // 여기에 데이터 있음
+  res.render("mypage.ejs", { 사용자: req.user });
+});
 
-// // 미들웨어 생성
-// function areYouLogin(req, res, next) {
-//   // req.user(로그인 후 세션이 있으면 항상 있음)가 있으면 next() 통과
-//   if (req.user) {
-//     next();
-//   } else {
-//     res.send("로그인 안함");
-//   }
-// }
+// 미들웨어 생성
+function areYouLogin(req, res, next) {
+  // req.user(로그인 후 세션이 있으면 항상 있음)가 있으면 next() 통과
+  if (req.user) {
+    next();
+  } else {
+    res.send("로그인 안함");
+  }
+}
 
 // 미들웨어 (요청과 응답 사이에 실행되는 코드)
 
@@ -160,5 +151,49 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((아이디, done) => {
   db.collection("user").findOne({ username: 아이디 }, (err, result) => {
     done(null, result);
+  });
+});
+
+// 게시판
+app.get("/board/write", areYouLogin, (req, res) => {
+  console.log("게시판 입장");
+});
+
+app.get("/board/list", (req, res) => {
+  db.collection("user")
+    .find()
+    .toArray((err, result) => {
+      // console.log(result);
+      res.redirect("/board/list" /*{ info: result }*/);
+    });
+});
+
+app.post("/board/add", (req, res) => {
+  // db에 있는 counter라는 컬렉션을 찾고 그 안에 있는 Posts를 찾고 Posts를 변수에 저장
+  db.collection("counter").findOne({ name: "posts" }, (err, result) => {
+    var totalPost = result.totalPost;
+    // db에 있는 post라는 컬렉션에 id, title, date를 넣어줌
+    db.collection("board").insertOne(
+      {
+        _id: totalPost + 1,
+        title: req.body.title,
+        text: req.body.text,
+        // writer: req.user.name, // 게시판 작성자 추가
+      },
+      // 위에 코드가 완료가 되면 db에 있는 counter 안에 있는 Posts를 수정해줌
+      (err, data) => {
+        console.log("저장완료");
+        db.collection("counter").updateOne(
+          { name: "posts" } /*수정할 데이터*/,
+          { $inc: { totalPost: 1 } } /*$operator 필요 수정값*/,
+          (err, result) => {
+            if (err) {
+              return console.log(err);
+            }
+            res.redirect("/board/list" /*{ writer: req.user }*/);
+          }
+        );
+      }
+    );
   });
 });
