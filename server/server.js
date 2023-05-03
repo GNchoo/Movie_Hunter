@@ -180,7 +180,7 @@ app.post("/board/add", (req, res) => {
         text: req.body.text,
         // writer: req.user.name, // 게시판 작성자 추가
       },
-      // 위에 코드가 완료가 되면 db에 있는 counter 안에 있는 Posts를 수정해줌.
+      // 위에 코드가 완료가 되면 db에 있는 counter 안에 있는 Posts를 수정해줌
       (err, data) => {
         console.log("저장완료");
         db.collection("counter").updateOne(
@@ -197,3 +197,4 @@ app.post("/board/add", (req, res) => {
     );
   });
 });
+>>>>>>> 7b8e1442310b82f2af3eed5c1344fa6b88b0217e
