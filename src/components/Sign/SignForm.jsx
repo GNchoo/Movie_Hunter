@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Container, Input, Warning } from "./SignForm.style";
+import { Container, Warning } from "./SignForm.style";
 import axios from "axios";
 import { ServerApi } from "../../api/ServerApi";
+import Input from "../input/Input";
+import Button from "../button/Button";
+import DatePicker from "react-datepicker";
+import { ko } from "date-fns/esm/locale";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const SignForm = () => {
   const navigate = useNavigate();
@@ -10,8 +16,8 @@ const SignForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
-  const [birth, setBirth] = useState("");
-  const [sex, setSex] = useState("");
+  const [birth, setBirth] = useState(new Date());
+  const [sex, setSex] = useState([]);
   const [passwordOk, setPasswordOk] = useState(false);
 
   const containsSpecialCharacter = (pw) => {
@@ -47,6 +53,11 @@ const SignForm = () => {
         alert("아이디가 이미 존재합니다.");
       }
     }
+  };
+
+  const HandleClickRadioButton = (e) => {
+    console.log(e.target.value);
+    setSex(e.target.value);
   };
 
   return (
@@ -89,23 +100,49 @@ const SignForm = () => {
             <div style={{ marginBottom: "10px" }} />
           )}
           <br />
-          <Input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+          <Input
+            type="password"
+            placeholder="비밀번호 확인"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
           <br />
-          <Input style={{ marginTop: "10px" }} type="text" placeholder="닉네임" value={name} onChange={(e) => setName(e.target.value)} required />
+          <Input
+            style={{ marginTop: "10px" }}
+            type="text"
+            placeholder="닉네임"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <br />
-          <Input style={{ marginTop: "10px" }} type="date" placeholder="000000 생년월일" value={birth} onChange={(e) => setBirth(e.target.value)} required />
+          <DatePicker
+            locale={ko}
+            selected={birth}
+            onChange={(date) => setBirth(date)}
+          />
           <br />
-          <div>
+          <div style={{ marginTop: "10px" }}>
+            <input
+              style={{ marginLeft: "10px" }}
+              type="checkbox"
+              name="gender"
+              value="male"
+              checked={sex === "male"}
+              onChange={HandleClickRadioButton}
+            />
+            <label>남자</label>
             <label>
-              <input style={{ display: "flex" }} type="radio" name="gender" value="male" checked={sex === "male"} onChange={(e) => setSex(e.target.value)} />
               <input
-                style={{ display: "flex" }}
-                type="radio"
+                style={{ marginLeft: "10px" }}
+                type="checkbox"
                 name="gender"
                 value="female"
                 checked={sex === "female"}
-                onChange={(e) => setSex(e.target.value)}
+                onChange={HandleClickRadioButton}
               />
+              여자
             </label>
           </div>{" "}
           <br />

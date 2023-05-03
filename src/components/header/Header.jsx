@@ -25,7 +25,7 @@ const headerNav = [
   },
   {
     display: "게시판",
-    path: "/Board",
+    path: "/BoardList",
   },
   {
     display: "로그인",

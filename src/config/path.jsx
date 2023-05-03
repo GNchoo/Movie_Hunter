@@ -8,16 +8,18 @@ import Detail from "../pages/detail/Detail";
 import Login from "../pages/detail/Login";
 import ChuChon from "../pages/detail/ChuChon";
 import Board from "../pages/detail/Board";
-import SignForm from "../components/Sign/SignForm";
+import BoardList from "../pages/detail/BoardList";
+import Sign from "./../pages/detail/Sign";
 
-function rou() {
+function path() {
   return (
     <div>
       <Routes>
         <Route path="/Board" element={<Board />} />
+        <Route path="/BoardList" element={<BoardList />} />
         <Route path="/ChuChon" element={<ChuChon />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/SignForm" element={<SignForm />} />
+        <Route path="/Sign" element={<Sign />} />
         <Route path="/:category/search/:keyword" element={<Catalog />} />
         <Route path="/:category/:id" element={<Detail />} />
         <Route path="/:category" element={<Catalog />} />
@@ -27,4 +29,4 @@ function rou() {
   );
 }
 
-export default rou;
+export default path;
