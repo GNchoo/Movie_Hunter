@@ -14,12 +14,6 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem("id")) {
-      navigate("/home");
-    }
-  }, [navigate]);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
