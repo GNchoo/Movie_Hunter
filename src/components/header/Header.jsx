@@ -76,7 +76,7 @@ const Header = () => {
             </li>
           ))}
         </ul>
-        <div>
+        <div style={{ marginBottom: "20px" }}>
           {location.pathname === "/login" ? (
             <Link to={"/sign"}>
               <button>회원가입</button>

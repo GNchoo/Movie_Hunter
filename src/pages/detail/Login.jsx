@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ServerApi } from "../../api/ServerApi";
 
@@ -27,7 +27,7 @@ const Login = (props) => {
         username,
         password,
       });
-      console.log(response.data);
+      // console.log(response.data); 데이터 확인용
       alert("로그인 성공");
       localStorage.setItem("id", response.data.username);
       navigate("/");
