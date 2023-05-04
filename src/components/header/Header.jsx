@@ -40,7 +40,9 @@ const Header = () => {
   useEffect(() => {
     const id = localStorage.getItem("id");
     setIsLoggedIn(id != null);
+  }, [location]);
 
+  useEffect(() => {
     const shrinkHeader = () => {
       if (
         document.body.scrollTop > 100 ||
@@ -55,7 +57,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", shrinkHeader);
     };
-  });
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
     localStorage.clear();
