@@ -1,9 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-
 import { Link, useLocation } from "react-router-dom";
-
 import "./header.scss";
-
 import logo from "../../assets/movielogo.png";
 
 const headerNav = [
