@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
+import "./Board.scss";
 import bg from "../../assets/body-bg.jpg";
 
 function Board() {
@@ -47,7 +48,12 @@ function Board() {
           onChange={handlePostChange}
           value={newPost}
         />
-        <button type="submit">글쓰기</button>
+        <button
+          type="submit"
+          style={{ margin: "0 auto", display: "block", marginTop: "10px" }}
+        >
+          글쓰기
+        </button>
       </form>
     </div>
   );

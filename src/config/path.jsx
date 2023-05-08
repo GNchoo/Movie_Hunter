@@ -14,14 +14,14 @@ function path() {
   return (
     <div>
       <Routes>
-        <Route path='/Board' element={<Board />} />
-        <Route path='/ChuChon' element={<ChuChon />} />
-        <Route path='/Login' element={<Login />} />
-        <Route path='/Sign' element={<Sign />} />
-        <Route path='/:category/search/:keyword' element={<Catalog />} />
-        <Route path='/:category/:id' element={<Detail />} />
-        <Route path='/:category' element={<Catalog />} />
-        <Route path='/' element={<Home />} />
+        <Route path="/Board" element={<Board />} />
+        <Route path="/ChuChon" element={<ChuChon />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Sign" element={<Sign />} />
+        <Route path="/:category/search/:keyword" element={<Catalog />} />
+        <Route path="/:category/:id" element={<Detail />} />
+        <Route path="/:category" element={<Catalog />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </div>
   );
