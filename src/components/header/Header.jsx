@@ -3,34 +3,34 @@ import { Link, useLocation } from "react-router-dom";
 import "./header.scss";
 import logo from "../../assets/movielogo.png";
 
-const headerNav = [
-  {
-    display: "Home",
-    path: "/",
-  },
-  {
-    display: "검색 & 추천",
-    path: "/ChuChon",
-  },
-  {
-    display: "영화",
-    path: "/movie",
-  },
-  {
-    display: "TV 시리즈",
-    path: "/tv",
-  },
-  {
-    display: "게시판",
-    path: "/Board",
-  },
-];
-
 const Header = () => {
   const { pathname } = useLocation();
   const headerRef = useRef(null);
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const headerNav = [
+    {
+      display: "Home",
+      path: "/",
+    },
+    {
+      display: "검색 & 추천",
+      path: "/ChuChon",
+    },
+    {
+      display: "영화",
+      path: "/movie",
+    },
+    {
+      display: "TV 시리즈",
+      path: "/tv",
+    },
+    isLoggedIn && {
+      display: "게시판",
+      path: "/Board",
+    },
+  ].filter(Boolean);
 
   const active = headerNav.findIndex((e) => e.path === pathname);
 
