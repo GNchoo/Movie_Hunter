@@ -19,8 +19,8 @@ function Board() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(title);
-    console.log(text);
+    console.log(title); // 클라이언트 확인용
+    console.log(text); //  클라이언트 확인용
 
     axios
       .post(`${ServerApi}/board/add`, {
@@ -51,14 +51,17 @@ function Board() {
             display: "flex",
             justifyContent: "center",
             marginBottom: "10px",
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <span
             style={{
-              position: "absolute",
-              marginRight: "442px",
-              padding: "5px",
+              position: "relative",
+              padding: "7px",
               border: "1px solid #fff",
+              borderRadius: "5px",
+              backgroundColor: "green",
             }}
           >
             제목
@@ -68,6 +71,8 @@ function Board() {
               width: "400px",
               backgroundColor: "#fff",
               color: "black",
+              position: "relative",
+              zIndex: 1,
             }}
             type="text"
             name="title"
