@@ -4,37 +4,40 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
 import "./Board.scss";
 import bg from "../../assets/body-bg.jpg";
+import { ServerApi } from "../../api/ServerApi";
+import axios from "axios";
 
 function Board() {
-  const [newPost, setNewPost] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [title, setTitle] = useState(""); // 새로운 게시글의 제목을 담는 state
+  const [text, setText] = useState([]); // 새로운 게시글을 담는 state
   const navigate = useNavigate();
 
   const handlePostChange = (event, editor) => {
     const data = editor.getData();
-    setNewPost(data);
+    setText(data.replace(/(<([^>]+)>)/gi, ""));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(title);
+    console.log(text);
 
-    // 새로운 게시글을 서버에 전송하는 API 호출
-    fetch("/api/posts", {
-      method: "POST",
-      body: JSON.stringify({ content: newPost }),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // 게시글 목록을 다시 불러오는 API 호출
-        fetch("/api/posts")
-          .then((response) => response.json())
-          .then((data) => setPosts(data));
-        setPosts(data);
-        navigate.push("/board-list"); // 글쓰기가 완료되면 BoardList 페이지로 이동
-      });
+    axios
+      .post(`${ServerApi}/board/add`, {
+        title,
+        text,
+      })
+      .then((response) => {
+        // API 호출을 통해 게시글 목록 다시 불러오기
+        axios.get(`${ServerApi}/board/list`).then((response) => {
+          setText(response.data);
+          navigate(`${ServerApi}/board/list`); // 글쓰기가 완료되면 게시판 목록 페이지로 이동
+        });
+      })
+      .catch((error) => console.log(error));
 
-    setNewPost("");
+    setText(""); // 글쓰기 완료 후 새로운 게시글 내용 초기화
+    setTitle(""); // 글쓰기 완료 후 새로운 게시글 제목 초기화
   };
 
   return (
@@ -43,10 +46,39 @@ function Board() {
         <h2>게시판</h2>
       </div>
       <form onSubmit={handleSubmit}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "10px",
+          }}
+        >
+          <span
+            style={{
+              position: "absolute",
+              marginRight: "442px",
+              padding: "5px",
+              border: "1px solid #fff",
+            }}
+          >
+            제목
+          </span>
+          <input
+            style={{
+              width: "400px",
+              backgroundColor: "#fff",
+              color: "black",
+            }}
+            type="text"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
         <CKEditor
           editor={ClassicEditor}
           onChange={handlePostChange}
-          value={newPost}
+          value={text}
         />
         <button
           type="submit"
