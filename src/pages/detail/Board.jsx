@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
@@ -98,7 +98,12 @@ function Board() {
         />
         <button
           type="submit"
-          style={{ margin: "0 auto", display: "block", marginTop: "10px" }}
+          style={{
+            margin: "0 auto",
+            display: "block",
+            marginTop: "10px",
+            marginBottom: "5px",
+          }}
         >
           글쓰기
         </button>

@@ -9,12 +9,14 @@ import Login from "../pages/detail/Login";
 import ChuChon from "../pages/detail/ChuChon";
 import Board from "../pages/detail/Board";
 import Sign from "../pages/detail/Sign";
+import BoardList from "../pages/detail/BoardList";
 
 function path() {
   return (
     <div>
       <Routes>
-        <Route path="/Board" element={<Board />} />
+        <Route path="/board/list" element={<BoardList />} />
+        <Route path="/board" element={<Board />} />
         <Route path="/ChuChon" element={<ChuChon />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Sign" element={<Sign />} />

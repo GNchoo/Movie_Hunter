@@ -28,7 +28,7 @@ const Header = () => {
     },
     isLoggedIn && {
       display: "게시판",
-      path: "/Board",
+      path: "/board/list",
     },
   ].filter(Boolean);
 
