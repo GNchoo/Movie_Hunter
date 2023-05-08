@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
@@ -38,6 +38,16 @@ function Board() {
 
     setText(""); // 글쓰기 완료 후 새로운 게시글 내용 초기화
     setTitle(""); // 글쓰기 완료 후 새로운 게시글 제목 초기화
+  };
+
+  const editorConfiguration = {
+    language: "ko",
+    toolbar: ["heading", "|", "bold", "italic", "|", "undo", "redo"],
+    heading: {
+      options: [
+        { model: "paragraph", title: "본문", class: "ck-heading_paragraph" },
+      ],
+    },
   };
 
   return (
@@ -82,6 +92,7 @@ function Board() {
         </div>
         <CKEditor
           editor={ClassicEditor}
+          config={editorConfiguration}
           onChange={handlePostChange}
           value={text}
         />
