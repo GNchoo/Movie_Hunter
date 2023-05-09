@@ -9,6 +9,7 @@ import axios from "axios";
 
 function Board() {
   const [title, setTitle] = useState(""); // 새로운 게시글의 제목을 담는 state
+  const [user, setUser] = useState(""); // 작성자 state
   const [text, setText] = useState([]); // 새로운 게시글을 담는 state
   const navigate = useNavigate();
 
@@ -50,6 +51,8 @@ function Board() {
     },
   };
 
+  const name = localStorage.getItem("name");
+
   return (
     <div>
       <div className="page-header" style={{ backgroundImage: `url(${bg})` }}>
@@ -88,6 +91,31 @@ function Board() {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+          <span
+            style={{
+              position: "relative",
+              padding: "7px",
+              border: "1px solid #fff",
+              borderRadius: "5px",
+              backgroundColor: "green",
+            }}
+          >
+            작성자
+          </span>
+          <input
+            style={{
+              width: "100px",
+              backgroundColor: "#333",
+              color: "#fff",
+              position: "relative",
+              zIndex: 1,
+            }}
+            type="text"
+            name="user"
+            value={name}
+            disabled={true}
+            onChange={(e) => setUser(e.target.value)}
           />
         </div>
         <CKEditor

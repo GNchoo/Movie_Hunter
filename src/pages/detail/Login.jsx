@@ -27,9 +27,10 @@ const Login = (props) => {
         username,
         password,
       });
-      // console.log(response.data); 데이터 확인용
+      // console.log(response.data.user); 데이터 확인용
       alert("로그인 성공");
-      localStorage.setItem("id", response.data.username);
+      localStorage.setItem("id", response.data.user.username);
+      localStorage.setItem("name", response.data.user.name);
       navigate("/");
     } catch (error) {
       alert("아이디나 비밀번호를 다시 확인해주세요.");
