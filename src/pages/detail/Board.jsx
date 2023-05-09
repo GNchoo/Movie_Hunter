@@ -9,7 +9,8 @@ import axios from "axios";
 
 function Board() {
   const [title, setTitle] = useState(""); // 새로운 게시글의 제목을 담는 state
-  const [user, setUser] = useState(""); // 작성자 state
+  const name = localStorage.getItem("name");
+  const [user, setUser] = useState(name); // 작성자 state
   const [text, setText] = useState([]); // 새로운 게시글을 담는 state
   const navigate = useNavigate();
 
@@ -50,8 +51,6 @@ function Board() {
       ],
     },
   };
-
-  const name = localStorage.getItem("name");
 
   return (
     <div>
@@ -113,7 +112,7 @@ function Board() {
             }}
             type="text"
             name="user"
-            value={name}
+            value={user}
             disabled={true}
             onChange={(e) => setUser(e.target.value)}
           />
