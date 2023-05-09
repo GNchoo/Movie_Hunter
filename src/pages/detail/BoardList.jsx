@@ -6,13 +6,15 @@ import axios from "axios";
 
 function BoardList() {
   const [titles, setTitles] = useState([]);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
-    // 게시글 목록을 불러오는 API 호출
     axios
-      .get(`${ServerApi}/board/list?title=${titles}`)
-      .then((response) => response.json())
-      .then((data) => setTitles(data))
+      .get(`${ServerApi}/board/list`)
+      .then((response) => {
+        console.log(response.data);
+        setTitles(response.data);
+      })
       .catch((error) => console.log(error));
   }, []);
 

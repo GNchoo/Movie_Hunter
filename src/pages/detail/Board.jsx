@@ -27,13 +27,14 @@ function Board() {
     axios
       .post(`${ServerApi}/board/add`, {
         title,
+        user,
         text,
       })
       .then((response) => {
         // API 호출을 통해 게시글 목록 다시 불러오기
         axios.get(`${ServerApi}/board/list`).then((response) => {
           setText(response.data);
-          navigate(`${ServerApi}/board/list`); // 글쓰기가 완료되면 게시판 목록 페이지로 이동
+          navigate(`/board/list`); // 글쓰기가 완료되면 게시판 목록 페이지로 이동
         });
       })
       .catch((error) => console.log(error));
