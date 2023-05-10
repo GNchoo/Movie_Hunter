@@ -34,3 +34,17 @@
     margin-top: 20px;
   }
 }
+
+.parent-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  position: relative;
+}
+
+table tr td {
+  border: none;
+}
