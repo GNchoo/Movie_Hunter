@@ -10,11 +10,13 @@ import ChuChon from "../pages/detail/ChuChon";
 import Board from "../pages/detail/Board";
 import Sign from "../pages/detail/Sign";
 import BoardList from "../pages/detail/BoardList";
+import BoardDetail from "../pages/detail/BoardDetail";
 
 function path() {
   return (
     <div>
       <Routes>
+        <Route exact path="/board/list/:id" element={<BoardDetail />} />
         <Route path="/board/list" element={<BoardList />} />
         <Route path="/board" element={<Board />} />
         <Route path="/ChuChon" element={<ChuChon />} />
