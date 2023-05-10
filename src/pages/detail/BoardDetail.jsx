@@ -17,6 +17,9 @@ const BoardDetail = () => {
   const { id } = useParams(); // useParams 훅을 이용해 URL 파라미터 값을 가져옵니다.
   const navigate = useNavigate();
 
+  // 로컬스토리지에서 사용자 정보를 가져옴
+  const name = localStorage.getItem("name");
+
   useEffect(() => {
     axios
       .get(`${ServerApi}/board/list/${id}`)
@@ -41,7 +44,7 @@ const BoardDetail = () => {
       .put(`${ServerApi}/board/list/${id}`, updatedBoardData)
       .then((response) => {
         console.log(response);
-        navigate(`/board/list`);
+        navigate("/board/list");
       })
       .catch((error) => console.log(error));
   };
@@ -70,6 +73,10 @@ const BoardDetail = () => {
         { model: "paragraph", title: "본문", class: "ck-heading_paragraph" },
       ],
     },
+  };
+
+  const backList = (event) => {
+    navigate("/board/list");
   };
 
   return (
@@ -165,12 +172,15 @@ const BoardDetail = () => {
           </tbody>
         </table>
       )}
-      {isEditing ? null : (
-        <div style={{ display: "block", justifyContent: "center" }}>
-          <button onClick={() => setIsEditing(true)}>수정하기</button>
-          <button onClick={handleDeleteClick}>삭제하기</button>
-        </div>
-      )}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <button onClick={backList}>목록으로</button>
+        {name === boardData.writer && !isEditing && (
+          <div style={{ display: "block", justifyContent: "center" }}>
+            <button onClick={() => setIsEditing(true)}>수정하기</button>
+            <button onClick={handleDeleteClick}>삭제하기</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
