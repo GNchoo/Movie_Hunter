@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { styled } from "styled-components";
 
 const SignForm = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const SignForm = () => {
     }
 
     try {
-      const response = await axios.post(`${ServerApi}/Sign`, {
+      const response = await axios.post(`${ServerApi}/sign`, {
         username,
         password,
         name,
@@ -65,7 +66,7 @@ const SignForm = () => {
   return (
     <div>
       <Container>
-        <h2>회원가입</h2>
+        <h1>회원가입</h1>
         <form onSubmit={handleSubmit}>
           <table>
             <tbody>
@@ -170,8 +171,16 @@ const SignForm = () => {
               </tr>
             </tbody>
           </table>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button type="submit">회원가입</Button>
+          </div>
         </form>
-        <Button type="submit">회원가입</Button>
       </Container>
     </div>
   );
