@@ -116,28 +116,40 @@ function BoardList() {
       </table>
       <div>
         <div className="board-buttons">
-          <select
-            style={{ height: "35px", marginTop: "15px" }}
-            value={selectedFilter}
-            onChange={(e) => setSelectedFilter(e.target.value)}
+          <div style={{ marginTop: "15px" }}>
+            <select
+              style={{ height: "34px" }}
+              value={selectedFilter}
+              onChange={(e) => setSelectedFilter(e.target.value)}
+            >
+              <option value="title">제목</option>
+              <option value="writer">작성자</option>
+            </select>
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={handleSearch}
+              placeholder={`${
+                selectedFilter === "title" ? "제목" : "작성자"
+              }로 검색`}
+            />
+          </div>
+          <span
+            className="material-icons"
+            onClick={() => {
+              const enterEvent = new KeyboardEvent("keydown", {
+                key: "Enter",
+                keyCode: 13,
+                view: window,
+              });
+              handleSearch(enterEvent);
+            }}
           >
-            <option value="title">제목</option>
-            <option value="writer">작성자</option>
-          </select>
-          <input
-            style={{ width: "200px", height: "35px", marginTop: "15px" }}
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyDown={handleSearch}
-            placeholder={`${
-              selectedFilter === "title" ? "제목" : "작성자"
-            }로 검색`}
-          />
-
-          <span className="material-icons">search</span>
+            search
+          </span>
           <Link to={"/board"}>
-            <button>글쓰기</button>
+            <button style={{ height: "30px" }}>글쓰기</button>
           </Link>
         </div>
       </div>
