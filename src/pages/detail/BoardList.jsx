@@ -52,6 +52,7 @@ function BoardList() {
             <th>제목</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>조회수</th>
           </tr>
         </thead>
         <tbody>
@@ -63,6 +64,7 @@ function BoardList() {
               </td>
               <td>{title.writer}</td>
               <td>{title.date}</td>
+              <td>{title.views}</td>
             </tr>
           ))}
         </tbody>

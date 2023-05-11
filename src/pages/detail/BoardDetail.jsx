@@ -13,6 +13,7 @@ const BoardDetail = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [writer, setWriter] = useState("");
+  const [views, setViews] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams(); // useParams 훅을 이용해 URL 파라미터 값을 가져옵니다.
   const navigate = useNavigate();
@@ -24,11 +25,12 @@ const BoardDetail = () => {
     axios
       .get(`${ServerApi}/board/list/${id}`)
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         setBoardData(response.data);
         setTitle(response.data.title);
         setText(response.data.text);
         setWriter(response.data.writer);
+        setViews(response.data.views);
       })
       .catch((error) => console.log(error));
   }, [id]);
@@ -126,7 +128,7 @@ const BoardDetail = () => {
               </span>
               <input
                 style={{
-                  width: "100px",
+                  width: "80px",
                   backgroundColor: "#333",
                   color: "#fff",
                   position: "relative",
@@ -135,6 +137,31 @@ const BoardDetail = () => {
                 type="text"
                 name="user"
                 value={writer}
+                disabled={true}
+                onChange={(e) => setWriter(e.target.value)}
+              />
+              <span
+                style={{
+                  position: "relative",
+                  padding: "7px",
+                  border: "1px solid #fff",
+                  borderRadius: "5px",
+                  backgroundColor: "green",
+                }}
+              >
+                조회수
+              </span>
+              <input
+                style={{
+                  width: "45px",
+                  backgroundColor: "#333",
+                  color: "#fff",
+                  position: "relative",
+                  zIndex: 1,
+                }}
+                type="text"
+                name="user"
+                value={views}
                 disabled={true}
                 onChange={(e) => setWriter(e.target.value)}
               />
@@ -157,7 +184,7 @@ const BoardDetail = () => {
             </tr>
             <tr>
               <td className="info-cell">
-                {boardData.writer} | {boardData.date}
+                {boardData.writer} | {boardData.date} | {boardData.views}
               </td>
             </tr>
             <tr>
