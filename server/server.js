@@ -3,6 +3,8 @@ const session = require("express-session");
 const cors = require("cors");
 const app = express();
 
+require("dotenv").config();
+
 const passport = require("passport");
 require("./passport/passport");
 
@@ -33,21 +35,6 @@ app.use(cors());
 const mongodb = require("./db/db");
 mongodb.connect();
 
-// login
-const login = require("./routes/Login/login");
-
-app.use("/login", login);
-
-// sign
-const sign = require("./routes/Sign/sign");
-
-app.use("/sign", sign);
-
-// board
-const board = require("./routes/Board/board");
-
-app.use("/board", board);
-
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     res.render("home", { user: req.user });
@@ -57,6 +44,18 @@ app.get("/", (req, res) => {
   }
 });
 
-app.listen(4000, () => {
-  console.log("Server started on port 4000");
+// login
+const login = require("./routes/Login/login");
+app.use("/login", login);
+
+// sign
+const sign = require("./routes/Sign/sign");
+app.use("/sign", sign);
+
+// board
+const board = require("./routes/Board/board");
+app.use("/board", board);
+
+app.listen(process.env.PORT, () => {
+  console.log("Server started on port" + process.env.PORT);
 });
