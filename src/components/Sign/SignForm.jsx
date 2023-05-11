@@ -46,7 +46,7 @@ const SignForm = () => {
       });
       alert("회원가입 성공");
       console.log(response);
-      navigate("/");
+      navigate("/movie");
     } catch (error) {
       console.log(error);
       if (error.response.data.detail === "Username already registered") {

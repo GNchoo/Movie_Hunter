@@ -7,17 +7,26 @@ import "./BoardList.scss";
 
 function BoardList() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [titles, setTitles] = useState([]);
+  const [list, setList] = useState([]);
   const PER_PAGE = 10;
-  const totalItems = titles.length;
+  const totalItems = list.length;
   const totalPages = Math.ceil(totalItems / PER_PAGE);
+
+  const start = (currentPage - 1) * PER_PAGE;
+  const end = start + PER_PAGE;
+  const [searchResults, setSearchResults] = useState([]);
+  const currentList =
+    searchResults.length > 0 ? searchResults : list.slice(start, end);
+
+  const [selectedFilter, setSelectedFilter] = useState("title");
+  const [searchValue, setSearchValue] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
 
   useEffect(() => {
     axios
       .get(`${ServerApi}/board/list`)
       .then((response) => {
-        console.log(response.data);
-        setTitles(response.data);
+        setList(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -30,15 +39,33 @@ function BoardList() {
   };
 
   const handleNextPage = () => {
-    if (currentPage === Math.ceil(titles.length / PER_PAGE)) {
+    if (currentPage === Math.ceil(list.length / PER_PAGE)) {
       return;
     }
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  const start = (currentPage - 1) * PER_PAGE;
-  const end = start + PER_PAGE;
-  const currentTitles = titles.slice(start, end);
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsSearch(false);
+      const title = selectedFilter === "title" ? searchValue : null;
+      const writer = selectedFilter === "writer" ? searchValue : null;
+      const results = list.filter(
+        (item) =>
+          (!title || item.title.includes(title)) &&
+          (!writer || item.writer.includes(writer))
+      );
+      setSearchResults(results);
+      setCurrentPage(1);
+      if (results.length === 0) {
+        setSearchResults([]);
+        setIsSearch(true);
+      }
+    }
+  };
+
+  console.log(isSearch);
 
   return (
     <div>
@@ -56,35 +83,66 @@ function BoardList() {
           </tr>
         </thead>
         <tbody>
-          {currentTitles.map((title) => (
-            <tr key={title.id}>
-              <td>{title._id}</td>
-              <td>
-                <Link to={`/board/list/${title._id}`}>{title.title}</Link>
-              </td>
-              <td>{title.writer}</td>
-              <td>{title.date}</td>
-              <td>{title.views}</td>
+          {searchResults.length > 0 ? (
+            currentList.map((list) => (
+              <tr key={list.id}>
+                <td>{list._id}</td>
+                <td>
+                  <Link to={`/board/list/${list._id}`}>{list.title}</Link>
+                </td>
+                <td>{list.writer}</td>
+                <td>{list.date}</td>
+                <td>{list.views}</td>
+              </tr>
+            ))
+          ) : isSearch === true ? (
+            <tr>
+              <td colSpan="5">검색 결과가 없습니다.</td>
             </tr>
-          ))}
+          ) : (
+            list.slice(start, end).map((list) => (
+              <tr key={list.id}>
+                <td>{list._id}</td>
+                <td>
+                  <Link to={`/board/list/${list._id}`}>{list.title}</Link>
+                </td>
+                <td>{list.writer}</td>
+                <td>{list.date}</td>
+                <td>{list.views}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-      <div className="board-buttons">
-        <Link
-          to={"/board"}
-          style={{
-            display: "flex",
-            position: "relative",
-            justifyContent: "flex-end",
-            marginBottom: "20px",
-            marginLeft: "auto",
-          }}
-        >
-          <button>글쓰기</button>
-        </Link>
+      <div>
+        <div className="board-buttons">
+          <select
+            style={{ height: "35px", marginTop: "15px" }}
+            value={selectedFilter}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+          >
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
+          </select>
+          <input
+            style={{ width: "200px", height: "35px", marginTop: "15px" }}
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleSearch}
+            placeholder={`${
+              selectedFilter === "title" ? "제목" : "작성자"
+            }로 검색`}
+          />
+
+          <span className="material-icons">search</span>
+          <Link to={"/board"}>
+            <button>글쓰기</button>
+          </Link>
+        </div>
       </div>
       <div className="board-pagination">
-        <span class="material-icons" onClick={handlePrevPage}>
+        <span className="material-icons" onClick={handlePrevPage}>
           arrow_back_ios
         </span>
         <span onClick={handlePrevPage}>Prev</span>
@@ -92,7 +150,7 @@ function BoardList() {
           {currentPage} / {totalPages}
         </span>
         <span onClick={handleNextPage}>Next</span>
-        <span class="material-icons" onClick={handleNextPage}>
+        <span className="material-icons" onClick={handleNextPage}>
           arrow_forward_ios
         </span>
       </div>

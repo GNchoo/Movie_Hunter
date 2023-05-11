@@ -16,7 +16,7 @@ const Header = () => {
     },
     {
       display: "검색 & 추천",
-      path: "/ChuChon",
+      path: "/chuchon",
     },
     {
       display: "영화",

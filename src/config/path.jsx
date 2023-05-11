@@ -19,9 +19,9 @@ function path() {
         <Route exact path="/board/list/:id" element={<BoardDetail />} />
         <Route path="/board/list" element={<BoardList />} />
         <Route path="/board" element={<Board />} />
-        <Route path="/ChuChon" element={<ChuChon />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Sign" element={<Sign />} />
+        <Route path="/chuchon" element={<ChuChon />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign" element={<Sign />} />
         <Route path="/:category/search/:keyword" element={<Catalog />} />
         <Route path="/:category/:id" element={<Detail />} />
         <Route path="/:category" element={<Catalog />} />
