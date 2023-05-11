@@ -43,6 +43,8 @@ const SignForm = () => {
         username,
         password,
         name,
+        birth: birth.toISOString().slice(0, 10),
+        sex,
       });
       alert("회원가입 성공");
       console.log(response);
