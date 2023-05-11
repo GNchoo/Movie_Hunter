@@ -9,7 +9,9 @@ import axios from "axios";
 
 function Board() {
   const [title, setTitle] = useState(""); // 새로운 게시글의 제목을 담는 state
+  const id = localStorage.getItem("id");
   const name = localStorage.getItem("name");
+  const [userId, setUserId] = useState(id); // 작성자 id 값
   const [user, setUser] = useState(name); // 작성자 state
   const [text, setText] = useState([]); // 새로운 게시글을 담는 state
   const navigate = useNavigate();
@@ -23,12 +25,15 @@ function Board() {
     event.preventDefault();
     console.log(title); // 클라이언트 확인용
     console.log(text); //  클라이언트 확인용
+    console.log(userId); // 클라이언트 확인용
+    setUserId(userId); // 유저 아이디 값 실어서 보냄
 
     axios
       .post(`${ServerApi}/board/add`, {
         title,
         user,
         text,
+        userId,
       })
       .then((response) => {
         // API 호출을 통해 게시글 목록 다시 불러오기

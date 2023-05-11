@@ -65,7 +65,7 @@ function BoardList() {
     }
   };
 
-  console.log(isSearch);
+  console.log(searchResults);
 
   return (
     <div>

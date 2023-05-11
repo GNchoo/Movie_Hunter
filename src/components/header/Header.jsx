@@ -30,6 +30,10 @@ const Header = () => {
       display: "게시판",
       path: "/board/list",
     },
+    isLoggedIn && {
+      display: "마이 페이지",
+      path: "/mypage",
+    },
   ].filter(Boolean);
 
   const active = headerNav.findIndex((e) => e.path === pathname);

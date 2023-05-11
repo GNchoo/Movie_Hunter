@@ -4,7 +4,6 @@ import { ServerApi } from "../../api/ServerApi";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import bg from "../../assets/body-bg.jpg";
 import bg2 from "../../assets/login-bg.jpg";
 import "./BoardDetail.scss";
 
@@ -19,13 +18,13 @@ const BoardDetail = () => {
   const navigate = useNavigate();
 
   // 로컬스토리지에서 사용자 정보를 가져옴
-  const name = localStorage.getItem("name");
+  const _id = localStorage.getItem("id");
+  const [userId, setUserId] = useState(_id);
 
   useEffect(() => {
     axios
       .get(`${ServerApi}/board/list/${id}`)
       .then((response) => {
-        console.log(response.data);
         setBoardData(response.data);
         setTitle(response.data.title);
         setText(response.data.text);
@@ -35,17 +34,21 @@ const BoardDetail = () => {
       .catch((error) => console.log(error));
   }, [id]);
 
+  useEffect(() => {
+    setUserId(userId);
+  }, [userId]);
+
   const handleEditSubmit = (event) => {
     event.preventDefault();
     const updatedBoardData = {
       title: title,
       text: text,
       writer: writer,
+      username: userId,
     };
     axios
       .put(`${ServerApi}/board/list/${id}`, updatedBoardData)
       .then((response) => {
-        console.log(response);
         navigate("/board/list");
       })
       .catch((error) => console.log(error));
@@ -199,9 +202,15 @@ const BoardDetail = () => {
           </tbody>
         </table>
       )}
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginLeft: "10px",
+        }}
+      >
         <button onClick={backList}>목록으로</button>
-        {name === boardData.writer && !isEditing && (
+        {userId === boardData.username && !isEditing && (
           <div style={{ display: "block", justifyContent: "center" }}>
             <button onClick={() => setIsEditing(true)}>수정하기</button>
             <button onClick={handleDeleteClick}>삭제하기</button>
