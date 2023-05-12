@@ -56,6 +56,10 @@ app.use("/sign", sign);
 const board = require("./routes/Board/board");
 app.use("/board", board);
 
+// myPage
+const myPage = require("./routes/MyPage/myPage");
+app.use("/myPage", myPage);
+
 app.listen(process.env.PORT, () => {
   console.log("Server started on port" + process.env.PORT);
 });
