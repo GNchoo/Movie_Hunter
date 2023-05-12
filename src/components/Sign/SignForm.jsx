@@ -9,7 +9,6 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { styled } from "styled-components";
 
 const SignForm = () => {
   const navigate = useNavigate();
