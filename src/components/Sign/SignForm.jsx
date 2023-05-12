@@ -39,7 +39,7 @@ const SignForm = () => {
     }
 
     try {
-      const response = await axios.post(`${ServerApi}/sign`, {
+      const response = axios.post(`${ServerApi}/sign`, {
         username,
         password,
         name,

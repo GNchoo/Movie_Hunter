@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "./header.scss";
 import logo from "../../assets/movielogo.png";
 
@@ -8,6 +8,7 @@ const Header = () => {
   const headerRef = useRef(null);
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const num = localStorage.getItem("num");
 
   const headerNav = [
     {
@@ -32,7 +33,7 @@ const Header = () => {
     },
     isLoggedIn && {
       display: "마이 페이지",
-      path: "/mypage",
+      path: `/mypage`,
     },
   ].filter(Boolean);
 

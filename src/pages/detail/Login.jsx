@@ -29,6 +29,7 @@ const Login = (props) => {
       });
       console.log(response.data.user); //데이터 확인용
       alert("로그인 성공");
+      localStorage.setItem("num", response.data.user._id);
       localStorage.setItem("id", response.data.user.username);
       localStorage.setItem("name", response.data.user.name);
       localStorage.setItem("birth", response.data.user.birth);

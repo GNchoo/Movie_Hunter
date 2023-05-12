@@ -29,13 +29,14 @@ const MyInfo = () => {
       birth: userBirth.toISOString().slice(0, 10),
       sex: userSex,
     };
-    localStorage.setItem("id", userId);
-    localStorage.setItem("name", userName);
-    localStorage.setItem("birth", userBirth.toISOString().slice(0, 10));
-    localStorage.setItem("sex", userSex);
+
     axios
-      .put(`${ServerApi}/user`, updatedUserData)
+      .put(`${ServerApi}/mypage`, updatedUserData)
       .then((response) => {
+        localStorage.setItem("id", userId);
+        localStorage.setItem("name", userName);
+        localStorage.setItem("birth", userBirth.toISOString().slice(0, 10));
+        localStorage.setItem("sex", userSex);
         setIsEditing(false);
         navigate("/mypage");
       })
@@ -52,7 +53,7 @@ const MyInfo = () => {
       event.preventDefault();
       localStorage.clear();
       axios
-        .delete(`${ServerApi}/user`)
+        .delete(`${ServerApi}/mypage`, { data: { id: userId } })
         .then((response) => {
           console.log(response);
           navigate("/");
@@ -77,7 +78,7 @@ const MyInfo = () => {
                     <input
                       type="text"
                       name="uid"
-                      placeholder={id}
+                      value={userId}
                       disabled={true}
                       onChange={(e) => setUserId(e.target.value)}
                     ></input>
@@ -89,6 +90,7 @@ const MyInfo = () => {
                     <input
                       type="text"
                       name="uid"
+                      value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                     ></input>
                   </td>
