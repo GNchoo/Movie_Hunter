@@ -24,10 +24,15 @@ const MyInfo = () => {
   const userModify = (event) => {
     event.preventDefault();
     const updatedUserData = {
-      name: name,
-      birth: birth,
-      sex: sex,
+      username: userId,
+      name: userName,
+      birth: userBirth.toISOString().slice(0, 10),
+      sex: userSex,
     };
+    localStorage.setItem("id", userId);
+    localStorage.setItem("name", userName);
+    localStorage.setItem("birth", userBirth.toISOString().slice(0, 10));
+    localStorage.setItem("sex", userSex);
     axios
       .put(`${ServerApi}/user`, updatedUserData)
       .then((response) => {
