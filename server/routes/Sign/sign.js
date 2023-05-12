@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const mongodb = require("../../db/db");
 const bcrypt = require("bcrypt"); // 패스워드 해싱
-
 const saltRounds = 10; // salt를 생성하는데 필요한 라운드 수
 
-mongodb.connect(); // MongoDB 연결
+// MongoDB 연결
+const mongodb = require("../../db/db");
+mongodb.connect();
 
-router.get("/sign", (req, res) => {
+router.get("/", (req, res) => {
   console.log("sign request");
 });
 

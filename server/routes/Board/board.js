@@ -62,11 +62,13 @@ router.put("/list/:id", (req, res) => {
         title: updatedBoardData.title,
         text: updatedBoardData.text,
         writer: updatedBoardData.writer,
+        username: updatedBoardData.username,
       },
     },
     (err, result) => {
       if (err) return console.log(err);
       console.log("글 수정 완료");
+      console.log(req.params);
       res.send(result);
     }
   );
@@ -97,6 +99,7 @@ router.post("/add", (req, res) => {
         _id: totalPost + 1,
         title: req.body.title,
         text: req.body.text,
+        username: req.body.userId, // 고유 id 값 구분
         writer: req.body.user, // 게시판 작성자 추가
         date: new Date().toLocaleString("ko-KR", {
           timeZone: "Asia/Seoul",
