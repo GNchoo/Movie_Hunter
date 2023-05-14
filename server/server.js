@@ -60,6 +60,10 @@ app.use("/board", board);
 const myPage = require("./routes/MyPage/myPage");
 app.use("/myPage", myPage);
 
+// movie
+const movie = require("./routes/Movie/movie");
+app.use("/movie", movie);
+
 app.listen(process.env.PORT, () => {
   console.log("Server started on port" + process.env.PORT);
 });
