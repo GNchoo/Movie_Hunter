@@ -1,0 +1,50 @@
+@use "../../scss/" as *;
+
+.page-header {
+  //... 이전 스타일 유지
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .title-cell {
+    font-size: 28px;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+
+  .info-cell {
+    color: gray;
+    padding-bottom: 20px;
+  }
+
+  .text-container {
+    display: inline-block;
+    margin-right: 20px;
+    width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .text-container {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 20px;
+  }
+}
+
+.parent-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  position: relative;
+}
+
+table tr td {
+  border: none;
+}

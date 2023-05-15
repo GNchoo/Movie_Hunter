@@ -22,7 +22,9 @@ const HeroSlide = () => {
     const getMovies = async () => {
       const params = { page: 1 }; //db에서 첫페이지 영화 출력
       try {
-        const response = await tmdbApi.getMoviesList(movieType.popular, { params });
+        const response = await tmdbApi.getMoviesList(movieType.popular, {
+          params,
+        });
         setMovieItems(response.results.slice(1, 5)); // 슬라이드 몇개까지 나타낼지 입력
         console.log(response);
       } catch {
@@ -65,7 +67,7 @@ const HeroSlideItem = (props) => {
     const videos = await tmdbApi.getVideos(category.movie, item.id);
 
     if (videos.results.length > 0) {
-      const videSrc = "https://www.youtube.com/embed/" + videos.results[0].key;
+      const videSrc = "https://www.youtube.com/embed/" + videos.results[0].key; //메인화면 트레일러보기 창
       modal.querySelector(".modal__content > iframe").setAttribute("src", videSrc);
     } else {
       modal.querySelector(".modal__content").innerHTML = "No trailer";
@@ -81,7 +83,7 @@ const HeroSlideItem = (props) => {
           <h2 className="title">{item.title}</h2>
           <div className="overview">{item.overview}</div>
           <div className="btns">
-            <Button onClick={() => navigate.push("/movie/" + item.id)}>정보 보기</Button>
+            <Button onClick={() => navigate("/movie/" + item.id)}>정보 보기</Button>
             <OutlineButton onClick={setModalActive}>트레일러 보기</OutlineButton>
           </div>
         </div>

@@ -1,3 +1,4 @@
+//영화, TV시리즈 화면 파일
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 
@@ -23,7 +24,9 @@ const MovieGrid = (props) => {
         const params = {};
         switch (props.category) {
           case category.movie:
-            response = await tmdbApi.getMoviesList(movieType.upcoming, { params });
+            response = await tmdbApi.getMoviesList(movieType.upcoming, {
+              params,
+            });
             break;
           default:
             response = await tmdbApi.getTvList(tvType.popular, { params });
@@ -48,7 +51,9 @@ const MovieGrid = (props) => {
       };
       switch (props.category) {
         case category.movie:
-          response = await tmdbApi.getMoviesList(movieType.upcoming, { params });
+          response = await tmdbApi.getMoviesList(movieType.upcoming, {
+            params,
+          });
           break;
         default:
           response = await tmdbApi.getTvList(tvType.popular, { params });
@@ -92,7 +97,7 @@ const MovieSearch = (props) => {
 
   const goToSearch = useCallback(() => {
     if (keyword.trim().length > 0) {
-      navigate.push(`/${category[props.category]}/search/${keyword}`);
+      navigate(`/${category[props.category]}/search/${keyword}`);
     }
   }, [keyword, props.category, navigate]);
 

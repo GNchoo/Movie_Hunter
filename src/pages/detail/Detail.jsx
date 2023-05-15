@@ -57,6 +57,7 @@ const Detail = () => {
           </div>
           <div className="container">
             <div className="section mb-3">
+              <h2>유튜브 트레일러 보기</h2>
               <VideoList id={item.id} />
             </div>
             <div className="section mb-3">

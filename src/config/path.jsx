@@ -8,19 +8,22 @@ import Detail from "../pages/detail/Detail";
 import Login from "../pages/detail/Login";
 import ChuChon from "../pages/detail/ChuChon";
 import Board from "../pages/detail/Board";
+import Sign from "../pages/detail/Sign";
 import BoardList from "../pages/detail/BoardList";
-import Sign from "./../pages/detail/Sign";
+import BoardDetail from "../pages/detail/BoardDetail";
+import Mypage from "../pages/detail/Mypage";
 
 function path() {
   return (
     <div>
       <Routes>
-        <Route path="/Board" element={<Board />} />
-        <Route path="/Board/List" element={<BoardList />} />
-        <Route path="/Board/write" element={<BoardList />} />
-        <Route path="/ChuChon" element={<ChuChon />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Sign" element={<Sign />} />
+        <Route path="/mypage" element={<Mypage />} />
+        <Route exact path="/board/list/:id" element={<BoardDetail />} />
+        <Route path="/board/list" element={<BoardList />} />
+        <Route path="/board" element={<Board />} />
+        <Route path="/chuchon" element={<ChuChon />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign" element={<Sign />} />
         <Route path="/:category/search/:keyword" element={<Catalog />} />
         <Route path="/:category/:id" element={<Detail />} />
         <Route path="/:category" element={<Catalog />} />

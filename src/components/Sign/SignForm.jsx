@@ -39,14 +39,16 @@ const SignForm = () => {
     }
 
     try {
-      const response = await axios.post(`${ServerApi}/SignForm`, {
+      const response = axios.post(`${ServerApi}/sign`, {
         username,
         password,
         name,
+        birth: birth.toISOString().slice(0, 10),
+        sex,
       });
       alert("회원가입 성공");
       console.log(response);
-      navigate("/");
+      navigate("/movie");
     } catch (error) {
       console.log(error);
       if (error.response.data.detail === "Username already registered") {
@@ -63,90 +65,120 @@ const SignForm = () => {
   return (
     <div>
       <Container>
+        <h1>회원가입</h1>
         <form onSubmit={handleSubmit}>
-          <header style={{ marginBottom: "10px" }}>회원가입</header>
-          <Input
-            type="text"
-            style={{ marginBottom: "10px" }}
-            placeholder="아이디"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label>아이디</label>
+                </td>
+                <td>
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>비밀번호</label>
+                </td>
+                <td>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (containsSpecialCharacter(e.target.value)) {
+                        setPasswordOk(true);
+                      } else {
+                        setPasswordOk(false);
+                      }
+                    }}
+                    required
+                  />
+                  <br />
+                  {!passwordOk ? (
+                    <Warning>반드시 특수문자 1개 이상 포함해야 합니다.</Warning>
+                  ) : null}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>비밀번호 확인</label>
+                </td>
+                <td>
+                  <Input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>닉네임</label>
+                </td>
+                <td>
+                  <Input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>생년월일</label>
+                </td>
+                <td>
+                  <DatePicker
+                    locale={ko}
+                    selected={birth}
+                    dateFormat="yyyy/MM/dd"
+                    onChange={(date) => setBirth(date)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>성별</label>
+                </td>
+                <td>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="male"
+                    checked={sex === "male"}
+                    onChange={HandleClickRadioButton}
+                  />
+                  <label>남자</label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="female"
+                    checked={sex === "female"}
+                    onChange={HandleClickRadioButton}
+                  />
+                  <label>여자</label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            required
-          />
-          <br />
-          <Input
-            type="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              if (containsSpecialCharacter(e.target.value)) {
-                setPasswordOk(true);
-              } else {
-                setPasswordOk(false);
-              }
-            }}
-            required
-          />
-          {!passwordOk ? (
-            <Warning>
-              {" "}
-              <br />
-              반드시 특수문자 1개 이상 포함해야 합니다.
-            </Warning>
-          ) : (
-            <div style={{ marginBottom: "10px" }} />
-          )}
-          <br />
-          <Input
-            type="password"
-            placeholder="비밀번호 확인"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          <br />
-          <Input
-            style={{ marginTop: "10px" }}
-            type="text"
-            placeholder="닉네임"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <br />
-          <DatePicker
-            locale={ko}
-            selected={birth}
-            onChange={(date) => setBirth(date)}
-          />
-          <br />
-          <div style={{ marginTop: "10px" }}>
-            <input
-              style={{ marginLeft: "10px" }}
-              type="checkbox"
-              name="gender"
-              value="male"
-              checked={sex === "male"}
-              onChange={HandleClickRadioButton}
-            />
-            <label>남자</label>
-            <label>
-              <input
-                style={{ marginLeft: "10px" }}
-                type="checkbox"
-                name="gender"
-                value="female"
-                checked={sex === "female"}
-                onChange={HandleClickRadioButton}
-              />
-              여자
-            </label>
-          </div>{" "}
-          <br />
-          <Button type="submit">회원가입</Button>
+          >
+            <Button type="submit">회원가입</Button>
+          </div>
         </form>
       </Container>
     </div>
