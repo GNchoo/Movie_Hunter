@@ -10,7 +10,7 @@ import VideoList from "./VideoList";
 
 import MovieList from "../../components/movie-list/MovieList";
 
-import { ImStarFull } from "react-icons/im";
+import { ImStarFull, ImStarEmpty } from "react-icons/im";
 
 import styled from "styled-components";
 
@@ -27,14 +27,17 @@ const RatingBox = styled.div`
     color: #c4c4c4;
     cursor: pointer;
   }
-  :hover svg {
-    color: yellow;
-  }
-  & svg:hover ~ svg {
-    color: #c4c4c4;
-  }
+
   .yellow {
     color: yellow;
+  }
+  .rating {
+    :hover svg {
+      color: yellow;
+    }
+    & svg:hover ~ svg {
+      color: #c4c4c4;
+    }
   }
 `;
 
@@ -160,8 +163,6 @@ const Detail = () => {
     setText(""); // 글쓰기 완료 후 새로운 텍스트 내용 초기화
   };
 
-  console.log(currentYear - writerBirth.substring(0, 4) + 1);
-
   return (
     <>
       {item && (
@@ -223,7 +224,17 @@ const Detail = () => {
                     <td>{list._id}</td>
                     <td>{list.text}</td>
                     <td>{list.writer}</td>
-                    <td>{list.star}</td>
+                    <td>
+                      <RatingBox>
+                        {array.map((index) => (
+                          <ImStarFull
+                            key={index}
+                            className={index < list.star ? "yellow" : ""}
+                            size="14"
+                          />
+                        ))}
+                      </RatingBox>
+                    </td>
                     <td>{list.date}</td>
                   </tr>
                 ))}
@@ -255,7 +266,7 @@ const Detail = () => {
                     disabled={true}
                     onChange={(e) => setWriter(e.target.value)}
                   />
-                  <RatingBox>
+                  <RatingBox className="rating">
                     {array.map((el) => (
                       <ImStarFull
                         key={el}
