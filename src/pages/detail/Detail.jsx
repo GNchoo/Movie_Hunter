@@ -135,7 +135,7 @@ const Detail = () => {
       .post(`${ServerApi}/movie/${id}/add`, {
         text: text,
         writer: writer,
-        star: clicked,
+        star: sumArray(clicked),
       })
       .then((response) => {
         // API 호출을 통해 한줄평 목록 다시 불러오기
