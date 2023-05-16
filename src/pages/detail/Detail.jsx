@@ -170,7 +170,23 @@ const Detail = () => {
       .catch((error) => console.log(error));
   };
 
-  console.log(list._id);
+  let totalStar = 0;
+  let averageStar = 0;
+
+  list.forEach((list) => {
+    if (!isNaN(list.star)) {
+      totalStar += list.star;
+    }
+  });
+
+  if (list.length > 0) {
+    averageStar = totalStar / list.length;
+    averageStar = Math.round(averageStar); // 반올림 처리
+  }
+
+  console.log("list.star의 총합:", totalStar);
+  console.log("list.star의 평균:", averageStar);
+  console.log("리스트의 갯수:", list.length);
 
   return (
     <>
@@ -197,6 +213,15 @@ const Detail = () => {
             </div>
             <div className="movie-content__info">
               <h1 className="title">{item.title || item.name}</h1>
+              <RatingBox style={{ marginBottom: "20px" }}>
+                {array.map((index) => (
+                  <ImStarFull
+                    key={index}
+                    className={index < averageStar ? "yellow" : ""}
+                    size="40"
+                  />
+                ))}
+              </RatingBox>
               <div className="genres">
                 {item.genres &&
                   item.genres.slice(0, 5).map((genre, i) => (
@@ -228,34 +253,36 @@ const Detail = () => {
             >
               <div>
                 <h2>한줄평</h2>
-                {currentList.map((list) => (
-                  <tr key={list.id}>
-                    <td>
-                      {list._id}
-                      {writer === list.writer && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정)
-                        <button
-                          onClick={(event) => commentDelete(event, list._id)}
-                        >
-                          X
-                        </button>
-                      )}
-                    </td>
-                    <td>{list.text}</td>
-                    <td>{list.writer}</td>
-                    <td>
-                      <RatingBox>
-                        {array.map((index) => (
-                          <ImStarFull
-                            key={index}
-                            className={index < list.star ? "yellow" : ""}
-                            size="14"
-                          />
-                        ))}
-                      </RatingBox>
-                    </td>
-                    <td>{list.date}</td>
-                  </tr>
-                ))}
+                <table>
+                  {currentList.map((list) => (
+                    <tr key={list.id}>
+                      <td>
+                        {list._id}
+                        {writer === list.writer && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정)
+                          <button
+                            onClick={(event) => commentDelete(event, list._id)}
+                          >
+                            X
+                          </button>
+                        )}
+                      </td>
+                      <td>{list.text}</td>
+                      <td>{list.writer}</td>
+                      <td>
+                        <RatingBox>
+                          {array.map((index) => (
+                            <ImStarFull
+                              key={index}
+                              className={index < list.star ? "yellow" : ""}
+                              size="14"
+                            />
+                          ))}
+                        </RatingBox>
+                      </td>
+                      <td>{list.date}</td>
+                    </tr>
+                  ))}
+                </table>
                 <div className="board-pagination">
                   <span className="material-icons" onClick={handlePrevPage}>
                     arrow_back_ios
