@@ -48,7 +48,7 @@ const Detail = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [list, setList] = useState([]);
-  const PER_PAGE = 10;
+  const PER_PAGE = 3;
   const totalItems = list.length;
   const totalPages = Math.ceil(totalItems / PER_PAGE);
 
@@ -58,12 +58,17 @@ const Detail = () => {
   const currentList =
     searchResults.length > 0 ? searchResults : list.slice(start, end);
 
-  const array = [0, 1, 2, 3, 4];
-  const [clicked, setClicked] = useState([false, false, false, false, false]);
+  const array = [0, 1, 2, 3, 4]; // 별점 5개
+  const [clicked, setClicked] = useState([true, false, false, false, false]); // 1 true 0 false
 
-  const name = localStorage.getItem("name");
+  const name = localStorage.getItem("name"); // 로컬스토리지의 이름 담기
   const [writer, setWriter] = useState(name); // 작성자 state
   const [text, setText] = useState([]); // 새로운 게시글을 담는 state
+  const sex = localStorage.getItem("sex"); // 로컬스토리지의 성별 담기
+  const [writerSex, setWriterSex] = useState(sex);
+  const currentYear = new Date().getFullYear();
+  const birth = localStorage.getItem("birth");
+  const [writerBirth, setWriterBirth] = useState(birth);
 
   const navigate = useNavigate();
 
@@ -125,17 +130,23 @@ const Detail = () => {
 
   const CommentWrite = (event) => {
     event.preventDefault();
-    setWriter(writer); // 작성자 값 실어서 보냄\
+    setWriter(writer); // 작성자 값 실어서 보냄
+    setWriterSex(writerSex); // 작성자 값 실어서 보냄
+    setWriterBirth(writerBirth.substring(0, 4)); // 작성자 값 실어서 보냄
     setClicked(clicked);
     console.log(writer);
     console.log(text); //  클라이언트 확인용
     console.log(sumArray(clicked));
+    console.log(writerSex);
+    console.log(writerBirth.substring(0, 4));
 
     axios
       .post(`${ServerApi}/movie/${id}/add`, {
         text: text,
         writer: writer,
         star: sumArray(clicked),
+        sex: writerSex,
+        age: currentYear - writerBirth.substring(0, 4) + 1,
       })
       .then((response) => {
         // API 호출을 통해 한줄평 목록 다시 불러오기
@@ -148,6 +159,8 @@ const Detail = () => {
 
     setText(""); // 글쓰기 완료 후 새로운 텍스트 내용 초기화
   };
+
+  console.log(currentYear - writerBirth.substring(0, 4) + 1);
 
   return (
     <>
@@ -204,11 +217,14 @@ const Detail = () => {
               }}
             >
               <div>
+                <h2>한줄평</h2>
                 {currentList.map((list) => (
                   <tr key={list.id}>
                     <td>{list._id}</td>
                     <td>{list.text}</td>
                     <td>{list.writer}</td>
+                    <td>{list.star}</td>
+                    <td>{list.date}</td>
                   </tr>
                 ))}
                 <div className="board-pagination">
@@ -225,7 +241,6 @@ const Detail = () => {
                   </span>
                 </div>
                 <div>
-                  <h2>한줄평</h2>
                   <input
                     style={{
                       width: "100px",
