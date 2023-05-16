@@ -44,12 +44,10 @@
 }
 
 /* 텍스트입력태그 */
-.ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-  min-height: 600px;
+.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 100px;
   margin-bottom: 30px;
-  p {
-    color: black;
-  }
+  color: black; /* p 선택자 삭제 */
   margin: 0 auto;
 }
 

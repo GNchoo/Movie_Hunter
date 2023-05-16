@@ -124,10 +124,20 @@ function Board() {
           />
         </div>
         <CKEditor
+          className="board"
           editor={ClassicEditor}
           config={editorConfiguration}
           onChange={handlePostChange}
           value={text}
+          styles={`
+        .ck-editor__editable {
+          min-height: 600px;
+          margin-bottom: 30px;
+        }
+        .ck-editor__editable p {
+          color: black;
+        }
+      `}
         />
         <button
           type="submit"

@@ -51,6 +51,7 @@ const SignForm = () => {
       navigate("/movie");
     } catch (error) {
       console.log(error);
+      alert("회원가입 실패");
       if (error.response.data.detail === "Username already registered") {
         alert("아이디가 이미 존재합니다.");
       }
