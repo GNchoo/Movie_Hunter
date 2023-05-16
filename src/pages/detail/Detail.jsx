@@ -172,6 +172,7 @@ const Detail = () => {
 
   let totalStar = 0;
   let averageStar = 0;
+  let score = 0;
 
   list.forEach((list) => {
     if (!isNaN(list.star)) {
@@ -181,12 +182,15 @@ const Detail = () => {
 
   if (list.length > 0) {
     averageStar = totalStar / list.length;
+    score = averageStar;
     averageStar = Math.round(averageStar); // 반올림 처리
+    score = score.toFixed(2); //소숫점 3자리까지만
   }
 
   console.log("list.star의 총합:", totalStar);
   console.log("list.star의 평균:", averageStar);
   console.log("리스트의 갯수:", list.length);
+  console.log("점수의 평균:", score);
 
   return (
     <>
@@ -221,6 +225,7 @@ const Detail = () => {
                     size="40"
                   />
                 ))}
+                <span style={{ fontSize: "25px" }}>{score} / 5.0</span>
               </RatingBox>
               <div className="genres">
                 {item.genres &&
