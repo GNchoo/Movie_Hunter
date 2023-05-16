@@ -274,7 +274,7 @@ const Detail = () => {
                             <ImStarFull
                               key={index}
                               className={index < list.star ? "yellow" : ""}
-                              size="14"
+                              size="18"
                             />
                           ))}
                         </RatingBox>
@@ -317,7 +317,7 @@ const Detail = () => {
                         key={el}
                         onClick={() => handleStarClick(el)}
                         className={clicked[el] && "yellow"}
-                        size="14"
+                        size="20"
                       />
                     ))}
                   </RatingBox>
