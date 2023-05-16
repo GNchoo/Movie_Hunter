@@ -45,7 +45,7 @@
 
 /* 텍스트입력태그 */
 .ck-editor__editable:not(.ck-editor__nested-editable) {
-  min-height: 100px;
+  min-height: 30px;
   margin-bottom: 30px;
   color: black; /* p 선택자 삭제 */
   margin: 0 auto;

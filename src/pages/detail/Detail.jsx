@@ -38,6 +38,10 @@ const RatingBox = styled.div`
   }
 `;
 
+function sumArray(arr) {
+  return arr.reduce((acc, curr) => acc + curr, 0);
+}
+
 const Detail = () => {
   const { category, id } = useParams();
   const [item, setItem] = useState(null);
@@ -121,14 +125,17 @@ const Detail = () => {
 
   const CommentWrite = (event) => {
     event.preventDefault();
+    setWriter(writer); // 작성자 값 실어서 보냄\
+    setClicked(clicked);
     console.log(writer);
     console.log(text); //  클라이언트 확인용
-    setWriter(writer); // 유저 아이디 값 실어서 보냄
+    console.log(sumArray(clicked));
 
     axios
       .post(`${ServerApi}/movie/${id}/add`, {
-        text,
-        writer,
+        text: text,
+        writer: writer,
+        star: clicked,
       })
       .then((response) => {
         // API 호출을 통해 한줄평 목록 다시 불러오기
@@ -139,7 +146,7 @@ const Detail = () => {
       })
       .catch((error) => console.log(error));
 
-    setText(""); // 글쓰기 완료 후 새로운 게시글 내용 초기화
+    setText(""); // 글쓰기 완료 후 새로운 텍스트 내용 초기화
   };
 
   return (
@@ -197,15 +204,13 @@ const Detail = () => {
               }}
             >
               <div>
-                <div>
-                  {currentList.map((list) => (
-                    <tr key={list.id}>
-                      <td>{list._id}</td>
-                      <td>{list.text}</td>
-                      <td>{list.writer}</td>
-                    </tr>
-                  ))}
-                </div>
+                {currentList.map((list) => (
+                  <tr key={list.id}>
+                    <td>{list._id}</td>
+                    <td>{list.text}</td>
+                    <td>{list.writer}</td>
+                  </tr>
+                ))}
                 <div className="board-pagination">
                   <span className="material-icons" onClick={handlePrevPage}>
                     arrow_back_ios
@@ -219,42 +224,44 @@ const Detail = () => {
                     arrow_forward_ios
                   </span>
                 </div>
-                <h2>한줄평</h2>
-                <input
-                  style={{
-                    width: "100px",
-                    backgroundColor: "#333",
-                    color: "#fff",
-                    position: "relative",
-                    zIndex: 1,
-                  }}
-                  type="text"
-                  name="user"
-                  value={writer}
-                  disabled={true}
-                  onChange={(e) => setWriter(e.target.value)}
-                />
-                <RatingBox>
-                  {array.map((el) => (
-                    <ImStarFull
-                      key={el}
-                      onClick={() => handleStarClick(el)}
-                      className={clicked[el] && "yellow"}
-                      size="14"
-                    />
-                  ))}
-                </RatingBox>
-              </div>
-              <br />
-              <div>
-                <CKEditor
-                  className="comment"
-                  editor={ClassicEditor}
-                  config={editorConfig}
-                  onChange={handlePostChange}
-                  value={text}
-                />
-                <button onClick={CommentWrite}>작성하기</button>
+                <div>
+                  <h2>한줄평</h2>
+                  <input
+                    style={{
+                      width: "100px",
+                      backgroundColor: "#333",
+                      color: "#fff",
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                    type="text"
+                    name="user"
+                    value={writer}
+                    disabled={true}
+                    onChange={(e) => setWriter(e.target.value)}
+                  />
+                  <RatingBox>
+                    {array.map((el) => (
+                      <ImStarFull
+                        key={el}
+                        onClick={() => handleStarClick(el)}
+                        className={clicked[el] && "yellow"}
+                        size="14"
+                      />
+                    ))}
+                  </RatingBox>
+                </div>
+                <br />
+                <div>
+                  <CKEditor
+                    className="comment"
+                    editor={ClassicEditor}
+                    config={editorConfig}
+                    onChange={handlePostChange}
+                    value={text}
+                  />
+                  <button onClick={CommentWrite}>작성하기</button>
+                </div>
               </div>
             </div>
             <div className="section mb-3">
