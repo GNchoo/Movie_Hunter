@@ -232,7 +232,7 @@ const Detail = () => {
                   <tr key={list.id}>
                     <td>
                       {list._id}
-                      {writer === list.writer && (
+                      {writer === list.writer && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정)
                         <button
                           onClick={(event) => commentDelete(event, list._id)}
                         >
