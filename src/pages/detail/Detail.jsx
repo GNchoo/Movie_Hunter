@@ -64,6 +64,8 @@ const Detail = () => {
   const array = [0, 1, 2, 3, 4]; // 별점 5개
   const [clicked, setClicked] = useState([true, false, false, false, false]); // 1 true 0 false
 
+  const _id = localStorage.getItem("id"); // 로컬스토리지의 아이디 담기
+  const [userId, setUserId] = useState(_id); // 작성자 state
   const name = localStorage.getItem("name"); // 로컬스토리지의 이름 담기
   const [writer, setWriter] = useState(name); // 작성자 state
   const [text, setText] = useState([]); // 새로운 게시글을 담는 state
@@ -102,9 +104,6 @@ const Detail = () => {
     styles: {
       color: "black",
     },
-    ckfinder: {
-      // CKFinder configuration options...
-    },
   };
 
   useEffect(() => {
@@ -133,18 +132,15 @@ const Detail = () => {
 
   const CommentWrite = (event) => {
     event.preventDefault();
+    setUserId(userId);
     setWriter(writer); // 작성자 값 실어서 보냄
     setWriterSex(writerSex); // 작성자 값 실어서 보냄
     setWriterBirth(writerBirth.substring(0, 4)); // 작성자 값 실어서 보냄
     setClicked(clicked);
-    console.log(writer);
-    console.log(text); //  클라이언트 확인용
-    console.log(sumArray(clicked));
-    console.log(writerSex);
-    console.log(writerBirth.substring(0, 4));
 
     axios
       .post(`${ServerApi}/movie/${id}/add`, {
+        username: userId,
         text: text,
         writer: writer,
         star: sumArray(clicked),
@@ -162,6 +158,19 @@ const Detail = () => {
 
     setText(""); // 글쓰기 완료 후 새로운 텍스트 내용 초기화
   };
+
+  const commentDelete = (event, commentId) => {
+    event.preventDefault();
+    axios
+      .delete(`${ServerApi}/movie/${id}`, { data: { _id: commentId } })
+      .then((response) => {
+        console.log(response);
+        navigate("/movie");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  console.log(list._id);
 
   return (
     <>
@@ -221,7 +230,16 @@ const Detail = () => {
                 <h2>한줄평</h2>
                 {currentList.map((list) => (
                   <tr key={list.id}>
-                    <td>{list._id}</td>
+                    <td>
+                      {list._id}
+                      {writer === list.writer && (
+                        <button
+                          onClick={(event) => commentDelete(event, list._id)}
+                        >
+                          X
+                        </button>
+                      )}
+                    </td>
                     <td>{list.text}</td>
                     <td>{list.writer}</td>
                     <td>
