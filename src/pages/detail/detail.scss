@@ -115,6 +115,105 @@
   }
 }
 
+.starscore {
+  width: 24%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
+  text-align: center;
+
+  th,
+  td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid black;
+  }
+
+  th {
+    background-color: #333;
+  }
+
+  /* 열 너비 조정 */
+  th:first-child,
+  td:first-child {
+    width: 12%;
+    text-align: center;
+  }
+
+  th:last-child,
+  td:last-child {
+    width: 12%;
+    text-align: center;
+  }
+}
+
 .comment {
-  height: 100px;
+  width: 70%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  th,
+  td {
+    text-align: center;
+    border: 1px solid black;
+  }
+
+  th {
+    background-color: #333;
+  }
+
+  /* 열 너비 조정 */
+  th:first-child,
+  td:first-child {
+    width: 3%;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 43%;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 5%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 6%;
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 8%;
+  }
+
+  th:nth-child(6),
+  td:nth-child(6) {
+    width: 3%;
+  }
+}
+
+.input-comment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+
+  input {
+    width: 100px;
+    background-color: #333;
+    color: #fff;
+  }
+  .rate-user {
+    margin-right: 10px;
+  }
+
+  .inputbox {
+    margin-right: 10px;
+  }
 }

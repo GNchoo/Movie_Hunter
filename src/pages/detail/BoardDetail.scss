@@ -48,3 +48,49 @@
 table tr td {
   border: none;
 }
+
+.detail {
+  width: 90%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
+  text-align: center;
+
+  th,
+  td {
+    text-align: center;
+    padding: 10px;
+  }
+
+  th {
+    background-color: #333;
+  }
+
+  /* 열 너비 조정 */
+  th:first-child,
+  td:first-child {
+    width: 5%;
+    text-align: center;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 78%;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 7%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 10%;
+  }
+
+  th:last-child,
+  td:last-child {
+    width: 5%;
+    text-align: center;
+  }
+}

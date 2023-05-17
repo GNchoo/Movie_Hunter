@@ -5,6 +5,7 @@ import { ServerApi } from "../../api/ServerApi";
 import { ko } from "date-fns/esm/locale";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./MyInfo.scss";
 
 const MyInfo = () => {
   const id = localStorage.getItem("id");
@@ -63,121 +64,109 @@ const MyInfo = () => {
     <div>
       <div className="page-header" style={{ backgroundImage: `url(${bg})` }}>
         <h1>회원 정보</h1>
-        {isEditing ? (
-          <div>
-            <table style={{ width: "20%" }}>
-              <tbody>
-                <tr>
-                  <td>
-                    <label>아이디</label>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      name="uid"
-                      value={userId}
-                      disabled={true}
-                      onChange={(e) => setUserId(e.target.value)}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label>닉네임</label>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      name="uid"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label>생년월일</label>
-                  </td>
-                  <td>
-                    <DatePicker
-                      locale={ko}
-                      selected={userBirth}
-                      dateFormat="yyyy/MM/dd"
-                      onChange={(date) => setUserBirth(date)}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label>성별</label>
-                  </td>
-                  <td>
-                    <div>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        checked={userSex === "male"}
-                        onChange={(e) => setUserSex(e.target.value)}
-                      />
-                      <label>남자</label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        checked={userSex === "female"}
-                        onChange={(e) => setUserSex(e.target.value)}
-                      />
-                      <label>여자</label>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <table style={{ width: "20%" }}>
+      </div>
+      {isEditing ? (
+        <div>
+          <table className="myinfo">
             <tbody>
               <tr>
-                <td>아이디</td>
-                <td>{userId}</td>
+                <th>
+                  <label>아이디</label>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    name="uid"
+                    value={userId}
+                    disabled={true}
+                    onChange={(e) => setUserId(e.target.value)}
+                  ></input>
+                </td>
               </tr>
               <tr>
-                <td>닉네임</td>
-                <td>{userName}</td>
+                <th>
+                  <label>닉네임</label>
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    name="uid"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                  ></input>
+                </td>
               </tr>
               <tr>
-                <td>생년월일</td>
-                <td>{birth}</td>
+                <th>
+                  <label>생년월일</label>
+                </th>
+                <td>
+                  <DatePicker
+                    locale={ko}
+                    selected={userBirth}
+                    dateFormat="yyyy/MM/dd"
+                    onChange={(date) => setUserBirth(date)}
+                  />
+                </td>
               </tr>
               <tr>
-                <td>성별</td>
-                <td>{userSex}</td>
+                <th>
+                  <label>성별</label>
+                </th>
+                <td>
+                  <div>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      checked={userSex === "male"}
+                      onChange={(e) => setUserSex(e.target.value)}
+                    />
+                    <label>남자</label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      checked={userSex === "female"}
+                      onChange={(e) => setUserSex(e.target.value)}
+                    />
+                    <label>여자</label>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
-        )}
-      </div>
+        </div>
+      ) : (
+        <table className="myinfo">
+          <tbody>
+            <tr>
+              <th>아이디</th>
+              <td>{userId}</td>
+            </tr>
+            <tr>
+              <th>닉네임</th>
+              <td>{userName}</td>
+            </tr>
+            <tr>
+              <th>생년월일</th>
+              <td>{birth}</td>
+            </tr>
+            <tr>
+              <th>성별</th>
+              <td>{userSex}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
       <div className="userInfoButton">
         {isEditing ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div>
             <button onClick={userModify}>수정하기</button>
             <button onClick={() => setIsEditing(false)}>취소</button>
           </div>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div>
             <button onClick={() => setIsEditing(true)}>수정</button>
             <button onClick={userDelete}>탈퇴</button>
           </div>

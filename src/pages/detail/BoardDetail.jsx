@@ -207,13 +207,43 @@ const BoardDetail = () => {
           display: "flex",
           justifyContent: "center",
           marginLeft: "10px",
+          marginBottom: "20px",
         }}
       >
-        <button onClick={backList}>목록으로</button>
+        <div
+          style={{
+            marginRight: "60px",
+          }}
+        >
+          <span class="material-icons" onClick={backList}>
+            list
+          </span>
+          <span onClick={backList}>목록으로</span>
+        </div>
         {userId === boardData.username && !isEditing && (
-          <div style={{ display: "block", justifyContent: "center" }}>
-            <button onClick={() => setIsEditing(true)}>수정하기</button>
-            <button onClick={handleDeleteClick}>삭제하기</button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                marginRight: "10px",
+              }}
+            >
+              <span class="material-icons" onClick={() => setIsEditing(true)}>
+                edit
+              </span>
+              <span onClick={() => setIsEditing(true)}>수정</span>
+            </div>
+            <div>
+              <span class="material-icons" onClick={handleDeleteClick}>
+                delete
+              </span>
+              <span onClick={handleDeleteClick}>삭제</span>
+            </div>
           </div>
         )}
       </div>

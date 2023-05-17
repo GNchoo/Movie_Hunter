@@ -21,8 +21,6 @@ import axios from "axios";
 import { ServerApi } from "../../api/ServerApi";
 
 const RatingBox = styled.div`
-  margin: 0 auto;
-
   & svg {
     color: #c4c4c4;
     cursor: pointer;
@@ -368,7 +366,7 @@ const Detail = () => {
               <h2>유튜브 트레일러 보기</h2>
               <VideoList id={item.id} />
             </div>
-            <table style={{ width: "40%" }}>
+            <table className="starscore">
               <thead>
                 <tr>
                   <th>연령별 평점</th>
@@ -437,13 +435,7 @@ const Detail = () => {
               </tbody>
             </table>
             <br />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div>
               <div>
                 <h2
                   style={{
@@ -454,20 +446,10 @@ const Detail = () => {
                 >
                   한줄평
                 </h2>
-                <table>
+                <table className="comment">
                   {currentList.map((list) => (
                     <tr key={list.id}>
-                      <td>
-                        {list._id}
-                        {userId === list.username && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정) //아이디로 변경완료
-                          <span
-                            class="material-icons"
-                            onClick={(event) => commentDelete(event, list._id)}
-                          >
-                            delete_forever
-                          </span>
-                        )}
-                      </td>
+                      <td>{list._id}</td>
                       <td>{list.text}</td>
                       <td>{list.writer}</td>
                       <td>
@@ -482,6 +464,16 @@ const Detail = () => {
                         </RatingBox>
                       </td>
                       <td>{list.date}</td>
+                      {userId === list.username && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정) //아이디로 변경완료
+                        <td>
+                          <span
+                            class="material-icons"
+                            onClick={(event) => commentDelete(event, list._id)}
+                          >
+                            delete_forever
+                          </span>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </table>
@@ -498,42 +490,43 @@ const Detail = () => {
                     arrow_forward_ios
                   </span>
                 </div>
-                <div>
-                  <input
-                    style={{
-                      width: "100px",
-                      backgroundColor: "#333",
-                      color: "#fff",
-                      position: "relative",
-                      zIndex: 1,
-                    }}
-                    type="text"
-                    name="user"
-                    value={writer}
-                    disabled={true}
-                    onChange={(e) => setWriter(e.target.value)}
-                  />
-                  <RatingBox className="rating">
-                    {array.map((el) => (
-                      <ImStarFull
-                        key={el}
-                        onClick={() => handleStarClick(el)}
-                        className={clicked[el] && "yellow"}
-                        size="20"
-                      />
-                    ))}
-                  </RatingBox>
-                </div>
-                <br />
-                <div>
-                  <CKEditor
-                    className="comment"
-                    editor={ClassicEditor}
-                    config={editorConfig}
-                    onChange={handlePostChange}
-                    value={text}
-                  />
-                  <button onClick={CommentWrite}>작성하기</button>
+                <div className="input-comment">
+                  <div className="rate-user">
+                    <RatingBox className="rating">
+                      {array.map((el) => (
+                        <ImStarFull
+                          key={el}
+                          onClick={() => handleStarClick(el)}
+                          className={clicked[el] && "yellow"}
+                          size="18"
+                        />
+                      ))}
+                    </RatingBox>
+                    <input
+                      type="text"
+                      name="user"
+                      value={writer}
+                      disabled={true}
+                      onChange={(e) => setWriter(e.target.value)}
+                    />
+                  </div>
+                  <div className="inputbox">
+                    <CKEditor
+                      editor={ClassicEditor}
+                      config={editorConfig}
+                      onChange={handlePostChange}
+                      value={text}
+                    />
+                  </div>
+                  <span
+                    onClick={CommentWrite}
+                    style={{ marginTop: "22px", fontSize: "20px" }}
+                  >
+                    작성
+                  </span>
+                  <span onClick={CommentWrite} class="material-icons">
+                    create
+                  </span>
                 </div>
               </div>
             </div>

@@ -72,7 +72,7 @@ function BoardList() {
       <div className="page-header" style={{ backgroundImage: `url(${bg})` }}>
         <h2>게시판 목록</h2>
       </div>
-      <table>
+      <table className="board">
         <thead>
           <tr>
             <th>번호</th>
