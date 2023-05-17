@@ -259,6 +259,56 @@ const Detail = () => {
     // 예: list 배열이 변경될 때마다 calculateAverageRatings() 호출
   }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
 
+  const [sexRatings, setSexRatings] = useState({});
+
+  function getSexGroup(sex) {
+    if (sex === "male") {
+      return "남성";
+    } else if (sex === "female") {
+      return "여성";
+    }
+  }
+
+  useEffect(() => {
+    // 평균 평점 계산 로직
+    const calculateSexAverageRatings = () => {
+      const sexRatings = {
+        남성: 0,
+        여성: 0,
+      };
+
+      const countRatings = {
+        남성: 0,
+        여성: 0,
+      };
+
+      list.forEach((item) => {
+        if (!isNaN(item.star) && item.sex) {
+          const sexGroup = getSexGroup(item.sex);
+          if (sexRatings.hasOwnProperty(sexGroup)) {
+            sexRatings[sexGroup] += item.star;
+            countRatings[sexGroup]++;
+          }
+        }
+      });
+
+      for (const sexGroup in sexRatings) {
+        if (countRatings[sexGroup] > 0) {
+          sexRatings[sexGroup] = (
+            sexRatings[sexGroup] / countRatings[sexGroup]
+          ).toFixed(1);
+        }
+      }
+
+      setSexRatings(sexRatings);
+    };
+
+    calculateSexAverageRatings(); // 컴포넌트가 마운트될 때 평균 평점 계산
+
+    // 만약 `list` 배열이 변경될 때마다 평균 평점을 다시 계산하려면 `list`를 의존성 배열로 추가하고, 이벤트 핸들러를 구현해야 합니다.
+    // 예: list 배열이 변경될 때마다 calculateAverageRatings() 호출
+  }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
+
   return (
     <>
       {item && (
@@ -318,39 +368,74 @@ const Detail = () => {
               <h2>유튜브 트레일러 보기</h2>
               <VideoList id={item.id} />
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textalign: "center",
-                marginBottom: "10px",
-              }}
-            >
-              <h2>연령별 평점</h2>
-            </div>
-            {Object.entries(ageRatings).map(([ageGroup, averageRating]) => (
-              <div
-                key={ageGroup}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-              >
-                <RatingBox style={{ marginBottom: "20px" }}>
-                  {ageGroup} :
-                  {array.map((index) => (
-                    <ImStarFull
-                      key={index}
-                      className={index < averageRating ? "yellow" : ""}
-                      size="20"
-                    />
-                  ))}
-                </RatingBox>
-              </div>
-            ))}
+            <table style={{ width: "40%" }}>
+              <thead>
+                <tr>
+                  <th>연령별 평점</th>
+                  <th>성별별 평점</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {Object.entries(ageRatings).map(
+                      ([ageGroup, averageRating]) => (
+                        <div
+                          key={ageGroup}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                          }}
+                        >
+                          <RatingBox style={{ marginBottom: "20px" }}>
+                            {ageGroup} :
+                            {array.map((index) => (
+                              <ImStarFull
+                                key={index}
+                                className={
+                                  index < averageRating ? "yellow" : ""
+                                }
+                                size="20"
+                              />
+                            ))}
+                          </RatingBox>
+                        </div>
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {Object.entries(sexRatings).map(
+                      ([sexGroup, aversexRating]) => (
+                        <div
+                          key={sexGroup}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                          }}
+                        >
+                          <RatingBox style={{ marginBottom: "20px" }}>
+                            {sexGroup} :
+                            {array.map((index) => (
+                              <ImStarFull
+                                key={index}
+                                className={
+                                  index < aversexRating ? "yellow" : ""
+                                }
+                                size="20"
+                              />
+                            ))}
+                          </RatingBox>
+                        </div>
+                      )
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <br />
             <div
               style={{
