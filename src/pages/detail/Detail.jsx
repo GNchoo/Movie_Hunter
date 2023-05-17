@@ -184,7 +184,7 @@ const Detail = () => {
     averageStar = totalStar / list.length;
     score = averageStar;
     averageStar = Math.round(averageStar); // 반올림 처리
-    score = score.toFixed(2); //소숫점 3자리까지만
+    score = score.toFixed(1); //소숫점 1자리까지만
   }
 
   console.log("list.star의 총합:", totalStar);
@@ -225,7 +225,9 @@ const Detail = () => {
                     size="40"
                   />
                 ))}
-                <span style={{ fontSize: "25px" }}>{score} / 5.0</span>
+                <span style={{ fontSize: "25px", marginLeft: "10px" }}>
+                  {score} / 5.0
+                </span>
               </RatingBox>
               <div className="genres">
                 {item.genres &&
