@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import bg from "../../assets/body-bg.jpg";
-import { Button, Table } from "./MyInfo.styled";
 import DatePicker from "react-datepicker";
 import { ServerApi } from "../../api/ServerApi";
 import { ko } from "date-fns/esm/locale";
@@ -43,10 +42,6 @@ const MyInfo = () => {
       .catch((error) => console.log(error));
   };
 
-  const HandleClickRadioButton = (e) => {
-    setUserSex(e.target.value);
-  };
-
   const userDelete = (event) => {
     if (window.confirm("정말 탈퇴하시겠습니까?")) {
       event.preventDefault();
@@ -62,16 +57,20 @@ const MyInfo = () => {
     }
   };
 
+  console.log(userSex);
+
   return (
     <div>
       <div className="page-header" style={{ backgroundImage: `url(${bg})` }}>
         <h1>회원 정보</h1>
         {isEditing ? (
           <div>
-            <Table className="userInfo">
+            <table style={{ width: "20%" }}>
               <tbody>
                 <tr>
-                  <td>아이디</td>
+                  <td>
+                    <label>아이디</label>
+                  </td>
                   <td>
                     <input
                       type="text"
@@ -83,7 +82,9 @@ const MyInfo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>닉네임</td>
+                  <td>
+                    <label>닉네임</label>
+                  </td>
                   <td>
                     <input
                       type="text"
@@ -94,7 +95,9 @@ const MyInfo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>생년월일</td>
+                  <td>
+                    <label>생년월일</label>
+                  </td>
                   <td>
                     <DatePicker
                       locale={ko}
@@ -105,31 +108,35 @@ const MyInfo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>성별</td>
                   <td>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="male"
-                      checked={sex === "male"}
-                      onChange={HandleClickRadioButton}
-                    />
-                    <label>남자</label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="female"
-                      checked={sex === "female"}
-                      onChange={HandleClickRadioButton}
-                    />
-                    <label>여자</label>
+                    <label>성별</label>
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="male"
+                        checked={userSex === "male"}
+                        onChange={(e) => setUserSex(e.target.value)}
+                      />
+                      <label>남자</label>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="female"
+                        checked={userSex === "female"}
+                        onChange={(e) => setUserSex(e.target.value)}
+                      />
+                      <label>여자</label>
+                    </div>
                   </td>
                 </tr>
               </tbody>
-            </Table>
+            </table>
           </div>
         ) : (
-          <Table className="userInfo">
+          <table style={{ width: "20%" }}>
             <tbody>
               <tr>
                 <td>아이디</td>
@@ -148,7 +155,7 @@ const MyInfo = () => {
                 <td>{userSex}</td>
               </tr>
             </tbody>
-          </Table>
+          </table>
         )}
       </div>
       <div className="userInfoButton">
@@ -160,8 +167,8 @@ const MyInfo = () => {
               alignItems: "center",
             }}
           >
-            <Button onClick={userModify}>수정하기</Button>
-            <Button onClick={() => setIsEditing(false)}>취소</Button>
+            <button onClick={userModify}>수정하기</button>
+            <button onClick={() => setIsEditing(false)}>취소</button>
           </div>
         ) : (
           <div
@@ -171,8 +178,8 @@ const MyInfo = () => {
               alignItems: "center",
             }}
           >
-            <Button onClick={() => setIsEditing(true)}>수정</Button>
-            <Button onClick={userDelete}>탈퇴</Button>
+            <button onClick={() => setIsEditing(true)}>수정</button>
+            <button onClick={userDelete}>탈퇴</button>
           </div>
         )}
       </div>
