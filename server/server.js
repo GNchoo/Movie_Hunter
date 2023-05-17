@@ -8,6 +8,10 @@ require("dotenv").config();
 const passport = require("passport");
 require("./passport/passport");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
 app.use(
   session({
     secret: "secret",
@@ -26,10 +30,6 @@ function ensureAuthenticated(req, res, next) {
     res.redirect("/login");
   }
 }
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
 // MongoDB 연결
 const mongodb = require("./db/db");

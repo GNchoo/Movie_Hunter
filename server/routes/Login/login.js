@@ -8,10 +8,6 @@ const session = require("express-session");
 const mongodb = require("../../db/db");
 mongodb.connect();
 
-router.get("/", (req, res) => {
-  console.log("로그인 요청");
-});
-
 router.use(
   session({
     secret: "secret",
@@ -23,6 +19,11 @@ router.use(
 
 router.use(passport.initialize());
 router.use(passport.session());
+
+router.get("/", (req, res) => {
+  console.log("로그인 요청");
+  res.send("요청");
+});
 
 router.post(
   "/",

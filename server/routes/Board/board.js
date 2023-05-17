@@ -116,7 +116,7 @@ router.post("/add", (req, res) => {
             if (err) {
               return console.log(err);
             }
-            res.redirect("/board/list" /*{ writer: req.user.writer }*/);
+            res.redirect("/board/list");
           }
         );
       }

@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
   console.log("my page");
 });
 
-router.put("/user", (req, res) => {
+router.put("/", (req, res) => {
   const updatedUSerdData = req.body;
   const db = mongodb.getDB();
 
@@ -29,12 +29,11 @@ router.put("/user", (req, res) => {
   );
 });
 
-router.delete("/user", (req, res) => {
+router.delete("/", (req, res) => {
   const id = req.body.id;
   const db = mongodb.getDB();
-  console.log(req.body, req.data);
 
-  db.collection("user").deleteOne({ id: id }, (err, result) => {
+  db.collection("user").deleteOne({ username: id }, (err, result) => {
     if (err) {
       return console.log(err);
     }

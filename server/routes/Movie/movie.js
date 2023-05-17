@@ -39,6 +39,7 @@ router.post(`/:id/add`, (req, res) => {
         _id: totalComment + 1,
         movieId: id,
         text: req.body.text,
+        username: req.body.username,
         writer: req.body.writer,
         sex: req.body.sex,
         age: req.body.age,
