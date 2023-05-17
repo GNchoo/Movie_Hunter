@@ -155,12 +155,24 @@ const MyInfo = () => {
       </div>
       <div className="userInfoButton">
         {isEditing ? (
-          <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Button onClick={userModify}>수정하기</Button>
             <Button onClick={() => setIsEditing(false)}>취소</Button>
           </div>
         ) : (
-          <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Button onClick={() => setIsEditing(true)}>수정</Button>
             <Button onClick={userDelete}>탈퇴</Button>
           </div>

@@ -192,6 +192,72 @@ const Detail = () => {
   console.log("리스트의 갯수:", list.length);
   console.log("점수의 평균:", score);
 
+  const [ageRatings, setAgeRatings] = useState({});
+
+  function getAgeGroup(age) {
+    if (age >= 10 && age < 20) {
+      return "10대";
+    } else if (age >= 20 && age < 30) {
+      return "20대";
+    } else if (age >= 30 && age < 40) {
+      return "30대";
+    } else if (age >= 40 && age < 50) {
+      return "40대";
+    } else if (age >= 50 && age < 60) {
+      return "50대";
+    } else {
+      return "알수 없음";
+    }
+  }
+
+  useEffect(() => {
+    // 평균 평점 계산 로직
+    const calculateAverageRatings = () => {
+      const ageRatings = {
+        "10대": 0,
+        "20대": 0,
+        "30대": 0,
+        "40대": 0,
+        "50대": 0,
+        // 추가적인 연령대는 이곳에 추가할 수 있습니다.
+      };
+
+      const countRatings = {
+        "10대": 0,
+        "20대": 0,
+        "30대": 0,
+        "40대": 0,
+        "50대": 0,
+        // 추가적인 연령대는 이곳에 추가할 수 있습니다.
+      };
+
+      list.forEach((item) => {
+        if (!isNaN(item.star) && item.age) {
+          const ageGroup = getAgeGroup(item.age);
+          if (ageRatings.hasOwnProperty(ageGroup)) {
+            ageRatings[ageGroup] += item.star;
+            countRatings[ageGroup]++;
+          }
+        }
+      });
+
+      for (const ageGroup in ageRatings) {
+        if (countRatings[ageGroup] > 0) {
+          ageRatings[ageGroup] = (
+            ageRatings[ageGroup] / countRatings[ageGroup]
+          ).toFixed(1);
+        }
+      }
+
+      setAgeRatings(ageRatings);
+    };
+
+    calculateAverageRatings(); // 컴포넌트가 마운트될 때 평균 평점 계산
+
+    // 만약 `list` 배열이 변경될 때마다 평균 평점을 다시 계산하려면 `list`를 의존성 배열로 추가하고, 이벤트 핸들러를 구현해야 합니다.
+    // 예: list 배열이 변경될 때마다 calculateAverageRatings() 호출
+  }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
+
   return (
     <>
       {item && (
@@ -256,16 +322,58 @@ const Detail = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                textalign: "center",
+                marginBottom: "10px",
+              }}
+            >
+              <h2>연령별 평점</h2>
+            </div>
+            {Object.entries(ageRatings).map(([ageGroup, averageRating]) => (
+              <div
+                key={ageGroup}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <RatingBox style={{ marginBottom: "20px" }}>
+                  {ageGroup} :
+                  {array.map((index) => (
+                    <ImStarFull
+                      key={index}
+                      className={index < averageRating ? "yellow" : ""}
+                      size="20"
+                    />
+                  ))}
+                </RatingBox>
+              </div>
+            ))}
+            <br />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <div>
-                <h2>한줄평</h2>
+                <h2
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  한줄평
+                </h2>
                 <table>
                   {currentList.map((list) => (
                     <tr key={list.id}>
                       <td>
                         {list._id}
-                        {writer === list.writer && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정)
+                        {userId === list.username && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정) //아이디로 변경완료
                           <button
                             onClick={(event) => commentDelete(event, list._id)}
                           >
