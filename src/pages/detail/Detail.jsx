@@ -96,7 +96,10 @@ const Detail = () => {
 
   const handlePostChange = (event, editor) => {
     const data = editor.getData();
-    setText(data.replace(/(<([^>]+)>)/gi, ""));
+    const strippedData = data.replace(/(<([^>]+)>)/gi, "");
+    if (strippedData.length <= 50) {
+      setText(strippedData);
+    }
   };
 
   const editorConfig = {
@@ -104,6 +107,7 @@ const Detail = () => {
     styles: {
       color: "black",
     },
+    maxLength: 50,
   };
 
   useEffect(() => {
