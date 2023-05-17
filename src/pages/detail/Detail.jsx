@@ -110,7 +110,6 @@ const Detail = () => {
     axios
       .get(`${ServerApi}/movie/${id}`)
       .then((response) => {
-        console.log(response.data);
         setList(response.data);
       })
       .catch((error) => console.log(error));
@@ -160,14 +159,17 @@ const Detail = () => {
   };
 
   const commentDelete = (event, commentId) => {
-    event.preventDefault();
-    axios
-      .delete(`${ServerApi}/movie/${id}`, { data: { _id: commentId } })
-      .then((response) => {
-        console.log(response);
-        navigate("/movie");
-      })
-      .catch((error) => console.log(error));
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      event.preventDefault();
+      axios
+        .delete(`${ServerApi}/movie/${id}`, { data: { _id: commentId } })
+        .then((response) => {
+          navigate("/movie");
+        })
+        .catch((error) => console.log(error));
+    } else {
+      navigate(`/movie/${id}`);
+    }
   };
 
   let totalStar = 0;
@@ -186,11 +188,6 @@ const Detail = () => {
     averageStar = Math.round(averageStar); // 반올림 처리
     score = score.toFixed(1); //소숫점 1자리까지만
   }
-
-  console.log("list.star의 총합:", totalStar);
-  console.log("list.star의 평균:", averageStar);
-  console.log("리스트의 갯수:", list.length);
-  console.log("점수의 평균:", score);
 
   const [ageRatings, setAgeRatings] = useState({});
 
@@ -374,11 +371,12 @@ const Detail = () => {
                       <td>
                         {list._id}
                         {userId === list.username && ( //!조건 작성자일치시(나중에 아이디값으로 교체 예정) //아이디로 변경완료
-                          <button
+                          <span
+                            class="material-icons"
                             onClick={(event) => commentDelete(event, list._id)}
                           >
-                            X
-                          </button>
+                            delete_forever
+                          </span>
                         )}
                       </td>
                       <td>{list.text}</td>

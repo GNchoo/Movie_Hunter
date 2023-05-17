@@ -44,7 +44,6 @@ const MyInfo = () => {
   };
 
   const HandleClickRadioButton = (e) => {
-    console.log(e.target.value);
     setUserSex(e.target.value);
   };
 
@@ -55,7 +54,6 @@ const MyInfo = () => {
       axios
         .delete(`${ServerApi}/mypage`, { data: { id: userId } })
         .then((response) => {
-          console.log(response);
           navigate("/");
         })
         .catch((error) => console.log(error));
