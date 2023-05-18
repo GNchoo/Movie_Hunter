@@ -67,7 +67,7 @@ router.post(`/:id/add`, (req, res) => {
 
 // 한줄평 삭제
 router.delete("/:id", (req, res) => {
-  const _id = parseInt(req.body._id); // 이걸 프론트에서 받아와야함 어떻게 받을지는 미정
+  const _id = parseInt(req.body._id);
   const db = mongodb.getDB();
 
   db.collection("comment").deleteOne({ _id: _id }, (err, result) => {
@@ -79,26 +79,40 @@ router.delete("/:id", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
-  const _id = parseInt(req.body._id); // 이걸 프론트에서 받아와야함 어떻게 받을지는 미정
-  const updatedCommentdData = req.body;
+router.post("/:id/like", (req, res) => {
+  const movieId = req.params.id;
+  const userId = req.body.username;
+
   const db = mongodb.getDB();
 
-  db.collection("comment").updateOne(
-    { _id: _id },
-    {
-      // 변경되는 값은 text랑 star 만 변경
-      $set: {
-        text: updatedCommentdData.text,
-        star: updatedCommentdData.start,
-      },
-    },
-    (err, result) => {
-      if (err) return console.log(err);
-      console.log("글 수정 완료");
-      res.send(result);
+  db.collection("user").findOne({ username: userId }, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
     }
-  );
+    // 사용자를 찾을 수 없을때
+    if (!user) {
+      return res.status(404);
+    }
+    // 이미 좋아요한 영화 일때
+    if (user.likes.includes(movieId)) {
+      return res.status(400);
+    }
+
+    db.collection("user").updateOne(
+      { username: userId },
+      { $push: { likes: movieId } },
+      (err) => {
+        if (err) {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+
+        console.log(`${userId}가 ${movieId}를 좋아요하셨습니다.`);
+        return res.sendStatus(204);
+      }
+    );
+  });
 });
 
 module.exports = router;
