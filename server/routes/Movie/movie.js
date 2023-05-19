@@ -26,6 +26,30 @@ router.get("/:id", (req, res) => {
     });
 });
 
+//좋아요 확인
+router.get("/:id/like", (req, res) => {
+  const movieId = req.params.id;
+  const userId = req.query.username; // 수정: req.body.username 대신 req.query.username 사용
+
+  const db = mongodb.getDB();
+  db.collection("user").findOne({ username: userId }, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(500);
+    }
+
+    if (!result) {
+      return res.status(404).send("User not found");
+    }
+
+    if (result.likes && result.likes.includes(movieId)) {
+      return res.json({ isLiked: true }); // 수정: isLiked 프로퍼티로 응답
+    } else {
+      return res.json({ isLiked: false }); // 수정: isLiked 프로퍼티로 응답
+    }
+  });
+});
+
 // 영화 한줄평 등록
 router.post(`/:id/add`, (req, res) => {
   const id = req.params.id; // 클라이언트 요청에서 id 값을 추출
@@ -90,28 +114,39 @@ router.post("/:id/like", (req, res) => {
       console.log(err);
       return res.sendStatus(500);
     }
-    // 사용자를 찾을 수 없을때
+    // 사용자를 찾을 수 없을 때
     if (!user) {
-      return res.status(404);
+      return res.sendStatus(404);
     }
-    // 이미 좋아요한 영화 일때
-    if (user.likes.includes(movieId)) {
-      return res.status(400);
-    }
-
-    db.collection("user").updateOne(
-      { username: userId },
-      { $push: { likes: movieId } },
-      (err) => {
-        if (err) {
-          console.log(err);
-          return res.sendStatus(500);
+    // 이미 좋아요한 영화인 경우
+    if (!user.likes || !user.likes.includes(movieId)) {
+      // likes 프로퍼티가 없거나 좋아요한 영화가 아닌 경우
+      db.collection("user").updateOne(
+        { username: userId },
+        { $push: { likes: movieId } },
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+          }
+          console.log(`${userId}가 ${movieId}를 좋아요하셨습니다.`);
+          return res.sendStatus(204);
         }
-
-        console.log(`${userId}가 ${movieId}를 좋아요하셨습니다.`);
-        return res.sendStatus(204);
-      }
-    );
+      );
+    } else {
+      db.collection("user").updateOne(
+        { username: userId },
+        { $pull: { likes: movieId } },
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+          }
+          console.log(`${userId}가 ${movieId}를 싫어요하셨습니다.`);
+          return res.sendStatus(204);
+        }
+      );
+    }
   });
 });
 
