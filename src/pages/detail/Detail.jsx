@@ -194,7 +194,7 @@ const Detail = () => {
   const [ageRatings, setAgeRatings] = useState({});
 
   function getAgeGroup(age) {
-    if (age >= 10 && age < 20) {
+    if (age > 0 && age < 20) {
       return "10대";
     } else if (age >= 20 && age < 30) {
       return "20대";
