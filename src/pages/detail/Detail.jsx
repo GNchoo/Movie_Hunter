@@ -307,6 +307,46 @@ const Detail = () => {
     // 예: list 배열이 변경될 때마다 calculateAverageRatings() 호출
   }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
 
+  const [isLiked, setIsLiked] = useState(false);
+  const updatedLiked = !isLiked; // 업데이트된 토글된 상태 값을 변수에 저장
+
+  useEffect(() => {
+    axios
+      .get(`${ServerApi}/movie/${id}`, {
+        username: userId,
+        likes: updatedLiked, // 업데이트된 토글된 상태 값을 전송
+      })
+      .then((response) => {
+        setIsLiked(response.data.user.likes);
+      })
+      .catch((error) => console.log(error));
+  }, [id, userId, updatedLiked]);
+
+  const clickLike = (event) => {
+    event.preventDefault();
+    setIsLiked(!isLiked); // 현재 토글된 상태로 업데이트
+    axios
+      .post(`${ServerApi}/movie/${id}/like`, {
+        username: userId,
+        likes: updatedLiked, // 업데이트된 토글된 상태 값을 전송
+      })
+      .then((response) => {
+        axios.get(`${ServerApi}/movie/${id}`).then((response) => {
+          setList(response.data);
+          setIsLiked(updatedLiked);
+          navigate(`/movie`);
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const buttonStyle = {
+    marginLeft: "10px",
+    borderRadius: "20px",
+    backgroundColor: isLiked ? "#333" : "#0AB9A2",
+    fontWeight: "bold",
+  };
+
   return (
     <>
       {item && (
@@ -343,6 +383,9 @@ const Detail = () => {
                 <span style={{ fontSize: "25px", marginLeft: "10px" }}>
                   {score} / 5.0
                 </span>
+                <button style={buttonStyle} onClick={clickLike}>
+                  {isLiked ? "싫어요" : "좋아요"}
+                </button>
               </RatingBox>
               <div className="genres">
                 {item.genres &&
