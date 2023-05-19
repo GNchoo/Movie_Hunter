@@ -159,7 +159,7 @@
   th,
   td {
     text-align: center;
-    border: 1px solid black;
+    // border: 1px solid black;
   }
 
   th {
@@ -169,31 +169,26 @@
   /* 열 너비 조정 */
   th:first-child,
   td:first-child {
-    width: 3%;
+    width: 48%;
   }
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 43%;
+    width: 5%;
   }
 
   th:nth-child(3),
   td:nth-child(3) {
-    width: 5%;
+    width: 6%;
   }
 
   th:nth-child(4),
   td:nth-child(4) {
-    width: 6%;
+    width: 8%;
   }
 
   th:nth-child(5),
   td:nth-child(5) {
-    width: 8%;
-  }
-
-  th:nth-child(6),
-  td:nth-child(6) {
     width: 3%;
   }
 }

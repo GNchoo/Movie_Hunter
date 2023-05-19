@@ -308,37 +308,38 @@ const Detail = () => {
   }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
 
   const [isLiked, setIsLiked] = useState(false);
-  const updatedLiked = !isLiked; // 업데이트된 토글된 상태 값을 변수에 저장
-
-  useEffect(() => {
-    axios
-      .get(`${ServerApi}/movie/${id}`, {
-        username: userId,
-        likes: updatedLiked, // 업데이트된 토글된 상태 값을 전송
-      })
-      .then((response) => {
-        setIsLiked(response.data.user.likes);
-      })
-      .catch((error) => console.log(error));
-  }, [id, userId, updatedLiked]);
 
   const clickLike = (event) => {
     event.preventDefault();
-    setIsLiked(!isLiked); // 현재 토글된 상태로 업데이트
+    const updatedLiked = !isLiked; // 업데이트된 토글된 상태 값을 변수에 저장
     axios
       .post(`${ServerApi}/movie/${id}/like`, {
         username: userId,
         likes: updatedLiked, // 업데이트된 토글된 상태 값을 전송
       })
       .then((response) => {
-        axios.get(`${ServerApi}/movie/${id}`).then((response) => {
-          setList(response.data);
-          setIsLiked(updatedLiked);
-          navigate(`/movie`);
-        });
+        const isLiked = response.data.isLiked; // 수정: user 대신 isLiked 사용
+        setIsLiked(isLiked); // 상태 업데이트
+        console.log(response.data); // 수정: user 대신 response.data 출력
+        navigate(`/movie`);
       })
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    axios
+      .get(`${ServerApi}/movie/${id}/like`, {
+        params: {
+          username: userId,
+        },
+      })
+      .then((response) => {
+        const user = response.data;
+        const likes = user && user.isLiked ? user.isLiked : null;
+        setIsLiked(likes);
+      })
+      .catch((error) => console.log(error));
+  }, [id, userId, isLiked]);
 
   const buttonStyle = {
     marginLeft: "10px",
@@ -492,7 +493,7 @@ const Detail = () => {
                 <table className="comment">
                   {currentList.map((list) => (
                     <tr key={list.id}>
-                      <td>{list._id}</td>
+                      {/* <td>{list._id}</td> */}
                       <td>{list.text}</td>
                       <td>{list.writer}</td>
                       <td>
