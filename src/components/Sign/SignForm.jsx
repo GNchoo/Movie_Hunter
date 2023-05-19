@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Warning } from "./SignForm.style";
+import { Container, Table, Warning } from "./SignForm.style";
 import axios from "axios";
 import { ServerApi } from "../../api/ServerApi";
 import Input from "../input/Input";
@@ -51,6 +51,7 @@ const SignForm = () => {
       navigate("/movie");
     } catch (error) {
       console.log(error);
+      alert("회원가입 실패");
       if (error.response.data.detail === "Username already registered") {
         alert("아이디가 이미 존재합니다.");
       }
@@ -65,17 +66,18 @@ const SignForm = () => {
   return (
     <div>
       <Container>
-        <h1>회원가입</h1>
+        <h2 style={{ marginBottom: "20px" }}>회원가입</h2>
         <form onSubmit={handleSubmit}>
-          <table>
+          <Table>
             <tbody>
               <tr>
-                <td>
+                <th>
                   <label>아이디</label>
-                </td>
+                </th>
                 <td>
                   <Input
                     type="text"
+                    placeholder="아이디 입력"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -83,12 +85,13 @@ const SignForm = () => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <th>
                   <label>비밀번호</label>
-                </td>
+                </th>
                 <td>
                   <Input
                     type="password"
+                    placeholder="비밀번호 입력"
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
@@ -107,12 +110,13 @@ const SignForm = () => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <th>
                   <label>비밀번호 확인</label>
-                </td>
+                </th>
                 <td>
                   <Input
                     type="password"
+                    placeholder="비밀번호 입력"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -120,12 +124,13 @@ const SignForm = () => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <th>
                   <label>닉네임</label>
-                </td>
+                </th>
                 <td>
                   <Input
                     type="text"
+                    placeholder="닉네임 입력"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -133,9 +138,9 @@ const SignForm = () => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <th>
                   <label>생년월일</label>
-                </td>
+                </th>
                 <td>
                   <DatePicker
                     locale={ko}
@@ -146,9 +151,9 @@ const SignForm = () => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <th>
                   <label>성별</label>
-                </td>
+                </th>
                 <td>
                   <input
                     type="radio"
@@ -169,7 +174,7 @@ const SignForm = () => {
                 </td>
               </tr>
             </tbody>
-          </table>
+          </Table>
           <div
             style={{
               display: "flex",

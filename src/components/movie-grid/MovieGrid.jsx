@@ -1,4 +1,3 @@
-//영화, TV시리즈 화면 파일
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 

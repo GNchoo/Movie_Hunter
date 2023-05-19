@@ -48,9 +48,21 @@ const Video = (props) => {
   }, []);
 
   return (
-    <div className="video" style={{ display: "inline-block", marginRight: "10px", borderRadius: "8px" }}>
+    <div
+      className="video"
+      style={{
+        display: "inline-block",
+        marginRight: "10px",
+        borderRadius: "8px",
+      }}
+    >
       <div className="video-list"></div>
-      <iframe src={`https://www.youtube.com/embed/${item.key}`} ref={iframeRef} width="50%" title="video"></iframe>
+      <iframe
+        src={`https://www.youtube.com/embed/${item.key}`}
+        ref={iframeRef}
+        width="50%"
+        title="video"
+      ></iframe>
     </div>
   );
 };

@@ -35,3 +35,36 @@ export const Warning = styled.span`
   margin-bottom: 10px;
   padding: 1px;
 `;
+
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: separate;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 20px;
+
+  th,
+  td {
+    text-align: center;
+    padding: 10px;
+  }
+
+  th {
+    background-color: #333;
+  }
+
+  /* 열 너비 조정 */
+  th:first-child,
+  td:first-child {
+    width: 50%;
+  }
+
+  th:last-child,
+  td:last-child {
+    width: 30%;
+  }
+
+  input {
+    text-align: center;
+  }
+`;

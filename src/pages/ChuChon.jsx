@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 
-import Button from "../../components/button/Button";
-import Input from "../../components/input/Input";
-import "./ChuChon.scss";
+import Button from "../components/button/Button";
+import Input from "../components/input/Input";
+import "../components/chuchon/ChuChon.scss";
 
-import bg from "../../assets/body-bg.jpg";
-import bg2 from "../../assets/login-bg.jpg";
+import bg from "../assets/body-bg.jpg";
+import bg2 from "../assets/login-bg.jpg";
 const ChuChon = (props) => {
   const navigate = useNavigate();
 

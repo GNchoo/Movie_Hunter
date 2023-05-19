@@ -44,7 +44,14 @@ const HeroSlide = () => {
         // autoplay={{delay: 3000}}
       >
         {movieItems.map((item, i) => (
-          <SwiperSlide key={i}>{({ isActive }) => <HeroSlideItem item={item} className={`${isActive ? "active" : ""}`} />}</SwiperSlide>
+          <SwiperSlide key={i}>
+            {({ isActive }) => (
+              <HeroSlideItem
+                item={item}
+                className={`${isActive ? "active" : ""}`}
+              />
+            )}
+          </SwiperSlide>
         ))}
       </Swiper>
       {movieItems.map((item, i) => (
@@ -59,7 +66,9 @@ const HeroSlideItem = (props) => {
 
   const item = props.item;
 
-  const background = apiConfig.originalImage(item.backdrop_path ? item.backdrop_path : item.poster_path);
+  const background = apiConfig.originalImage(
+    item.backdrop_path ? item.backdrop_path : item.poster_path
+  );
 
   const setModalActive = async () => {
     const modal = document.querySelector(`#modal_${item.id}`);
@@ -67,8 +76,10 @@ const HeroSlideItem = (props) => {
     const videos = await tmdbApi.getVideos(category.movie, item.id);
 
     if (videos.results.length > 0) {
-      const videSrc = "https://www.youtube.com/embed/" + videos.results[0].key; //메인화면 트레일러보기 창
-      modal.querySelector(".modal__content > iframe").setAttribute("src", videSrc);
+      const videSrc = "https://www.youtube.com/embed/" + videos.results[0].key;
+      modal
+        .querySelector(".modal__content > iframe")
+        .setAttribute("src", videSrc);
     } else {
       modal.querySelector(".modal__content").innerHTML = "No trailer";
     }
@@ -77,14 +88,21 @@ const HeroSlideItem = (props) => {
   };
 
   return (
-    <div className={`hero-slide__item ${props.className}`} style={{ backgroundImage: `url(${background})` }}>
+    <div
+      className={`hero-slide__item ${props.className}`}
+      style={{ backgroundImage: `url(${background})` }}
+    >
       <div className="hero-slide__item__content container">
         <div className="hero-slide__item__content__info">
           <h2 className="title">{item.title}</h2>
           <div className="overview">{item.overview}</div>
           <div className="btns">
-            <Button onClick={() => navigate("/movie/" + item.id)}>정보 보기</Button>
-            <OutlineButton onClick={setModalActive}>트레일러 보기</OutlineButton>
+            <Button onClick={() => navigate("/movie/" + item.id)}>
+              정보 보기
+            </Button>
+            <OutlineButton onClick={setModalActive}>
+              트레일러 보기
+            </OutlineButton>
           </div>
         </div>
         <div className="hero-slide__item__content__poster">
@@ -105,7 +123,12 @@ const TrailerModal = (props) => {
   return (
     <Modal active={false} id={`modal_${item.id}`}>
       <ModalContent onClose={onClose}>
-        <iframe ref={iframeRef} width="100%" height="500px" title="trailer"></iframe>
+        <iframe
+          ref={iframeRef}
+          width="100%"
+          height="500px"
+          title="trailer"
+        ></iframe>
       </ModalContent>
     </Modal>
   );

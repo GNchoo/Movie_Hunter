@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
-import "./Board.scss";
-import bg from "../../assets/body-bg.jpg";
-import { ServerApi } from "../../api/ServerApi";
+import "../components/board/Board.scss";
+import bg from "../assets/body-bg.jpg";
+import { ServerApi } from "../api/ServerApi";
 import axios from "axios";
 
 function Board() {
@@ -52,9 +52,7 @@ function Board() {
     language: "ko",
     toolbar: ["heading", "|", "bold", "italic", "|", "undo", "redo"],
     heading: {
-      options: [
-        { model: "paragraph", title: "본문", class: "ck-heading_paragraph" },
-      ],
+      options: [{ model: "paragraph", title: "본문", class: "ck-heading_paragraph" }],
     },
   };
 
@@ -124,10 +122,20 @@ function Board() {
           />
         </div>
         <CKEditor
+          className="board"
           editor={ClassicEditor}
           config={editorConfiguration}
           onChange={handlePostChange}
           value={text}
+          styles={`
+        .ck-editor__editable {
+          min-height: 600px;
+          margin-bottom: 30px;
+        }
+        .ck-editor__editable p {
+          color: black;
+        }
+      `}
         />
         <button
           type="submit"
