@@ -308,38 +308,63 @@ const Detail = () => {
   }, [list]); // 의존성 배열로 list를 추가하여 useEffect()의 호출 조건 설정
 
   const [isLiked, setIsLiked] = useState(false);
+  const isMovie = window.location.pathname.includes("/movie");
 
   const clickLike = (event) => {
     event.preventDefault();
-    const updatedLiked = !isLiked; // 업데이트된 토글된 상태 값을 변수에 저장
-    axios
-      .post(`${ServerApi}/movie/${id}/like`, {
+    const updatedLiked = !isLiked;
+
+    let url;
+    let requestBody;
+    let type;
+    if (isMovie) {
+      url = `${ServerApi}/movie/${id}/like`;
+      requestBody = {
         username: userId,
-        likes: updatedLiked, // 업데이트된 토글된 상태 값을 전송
-      })
+        movieLikes: updatedLiked,
+      };
+      type = "movie";
+    } else {
+      url = `${ServerApi}/tv/${id}/like`;
+      requestBody = {
+        username: userId,
+        tvLikes: updatedLiked,
+      };
+      type = "tv";
+    }
+
+    axios
+      .post(url, requestBody)
       .then((response) => {
-        const isLiked = response.data.isLiked; // 수정: user 대신 isLiked 사용
-        setIsLiked(isLiked); // 상태 업데이트
-        console.log(response.data); // 수정: user 대신 response.data 출력
-        navigate(`/movie`);
+        const isLiked = response.data.isLiked;
+        setIsLiked(isLiked);
+        navigate(`/${type}`);
       })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
+    let url;
+
+    if (isMovie) {
+      url = `${ServerApi}/movie/${id}/like`;
+    } else {
+      url = `${ServerApi}/tv/${id}/like`;
+    }
+
     axios
-      .get(`${ServerApi}/movie/${id}/like`, {
+      .get(url, {
         params: {
           username: userId,
         },
       })
       .then((response) => {
-        const user = response.data;
-        const likes = user && user.isLiked ? user.isLiked : null;
-        setIsLiked(likes);
+        const { isLiked } = response.data; // isLiked 값을 추출하여 사용
+        setIsLiked(isLiked);
+        console.log(response.data);
       })
       .catch((error) => console.log(error));
-  }, [id, userId, isLiked]);
+  }, [id, userId, isLiked, isMovie]);
 
   const buttonStyle = {
     marginLeft: "10px",

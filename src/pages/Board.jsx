@@ -3,8 +3,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router";
 import "./Board.scss";
-import bg from "../../assets/body-bg.jpg";
-import { ServerApi } from "../../api/ServerApi";
+import bg from "../assets/body-bg.jpg";
+import { ServerApi } from "../api/ServerApi";
 import axios from "axios";
 
 function Board() {

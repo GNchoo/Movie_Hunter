@@ -5,13 +5,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Catalog from "../pages/Catalog";
 import Detail from "../pages/detail/Detail";
-import Login from "../pages/detail/Login";
-import ChuChon from "../pages/detail/ChuChon";
-import Board from "../pages/detail/Board";
-import Sign from "../pages/detail/Sign";
-import BoardList from "../pages/detail/BoardList";
-import BoardDetail from "../pages/detail/BoardDetail";
-import Mypage from "../pages/detail/Mypage";
+import Login from "../pages/Login";
+import ChuChon from "../components/chuchon/ChuChon";
+import Board from "../pages/Board";
+import Sign from "../pages/Sign";
+import BoardList from "../components/board/BoardList";
+import BoardDetail from "../components/board/BoardDetail";
+import Mypage from "../pages/Mypage";
 
 function path() {
   return (
