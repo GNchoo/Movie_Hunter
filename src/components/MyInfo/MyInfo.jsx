@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bg from "../../assets/body-bg.jpg";
 import DatePicker from "react-datepicker";
 import { ServerApi } from "../../api/ServerApi";
@@ -6,6 +6,8 @@ import { ko } from "date-fns/esm/locale";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./MyInfo.scss";
+import MovieList from "../movie-list/MovieList";
+import { category, movieType, tvType } from "../../api/tmdbApi";
 
 const MyInfo = () => {
   const id = localStorage.getItem("id");
@@ -58,7 +60,15 @@ const MyInfo = () => {
     }
   };
 
-  console.log(userSex);
+  useEffect(() => {
+    axios
+      .get(`${ServerApi}/mypage?username=${userId}`)
+      .then((response) => {
+        console.log(response.data.movieLikes);
+        console.log(response.data.tvLikes);
+      })
+      .catch((error) => console.log(error));
+  }, [userId]);
 
   return (
     <div>
@@ -171,6 +181,24 @@ const MyInfo = () => {
             <button onClick={userDelete}>탈퇴</button>
           </div>
         )}
+      </div>
+      <MovieList />
+      <div className="container">
+        <div className="section mb-3">
+          <div className="section__header mb-2">
+            <h2>내가 좋아요한 영화</h2>
+          </div>
+          <MovieList category={category.movie} type={movieType.top_rated} />
+        </div>
+      </div>
+      <MovieList />
+      <div className="container">
+        <div className="section mb-3">
+          <div className="section__header mb-2">
+            <h2>내가 좋아요한 TV 프로그램</h2>
+          </div>
+          <MovieList category={category.tv} type={movieType.top_rated} />
+        </div>
       </div>
     </div>
   );
