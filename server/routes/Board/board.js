@@ -9,6 +9,7 @@ router.get("/", (req, res) => {
   console.log("게시판 입장");
 });
 
+// 게시글 목록 불러오기
 router.get("/list", (req, res) => {
   const db = mongodb.getDB();
 
@@ -23,6 +24,7 @@ router.get("/list", (req, res) => {
     });
 });
 
+// 게시글상세 페이지 불러오기
 router.get("/list/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const db = mongodb.getDB();
@@ -50,6 +52,7 @@ router.get("/list/:id", (req, res) => {
   );
 });
 
+// 게시글 수정
 router.put("/list/:id", (req, res) => {
   const { id } = req.params;
   const updatedBoardData = req.body;
@@ -74,6 +77,7 @@ router.put("/list/:id", (req, res) => {
   );
 });
 
+// 게시글 삭제
 router.delete("/list/:id", (req, res) => {
   const id = parseInt(req.params.id); // URL 파라미터로부터 게시글 ID를 가져옵니다.
   const db = mongodb.getDB();
@@ -86,7 +90,22 @@ router.delete("/list/:id", (req, res) => {
     res.sendStatus(204); // 클라이언트에게 성공적으로 처리되었음을 알립니다.
   });
 });
+// 게시글 댓글
+router.post("list/:id/add", (req, res) => {
+  const id = parseInt(req.params.id);
+  const db = mongodb.getDB();
 
+  db.collection("board").findOne({ _id: id }, (err, result) => {
+    const boardId = result._id;
+    db.collection("boardComments").insertOne({
+      boardId: boardId,
+      text: req.body.text,
+      username: req.body.username,
+    });
+  });
+});
+
+// 게시글 작성
 router.post("/add", (req, res) => {
   const db = mongodb.getDB();
 

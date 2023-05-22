@@ -42,7 +42,7 @@ router.get("/:id/like", (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    if (result.likes && result.likes.includes(movieId)) {
+    if (result.movieLikes && result.movieLikes.includes(movieId)) {
       return res.json({ isLiked: true }); // 수정: isLiked 프로퍼티로 응답
     } else {
       return res.json({ isLiked: false }); // 수정: isLiked 프로퍼티로 응답
@@ -119,11 +119,11 @@ router.post("/:id/like", (req, res) => {
       return res.sendStatus(404);
     }
     // 이미 좋아요한 영화인 경우
-    if (!user.likes || !user.likes.includes(movieId)) {
+    if (!user.movieLikes || !user.movieLikes.includes(movieId)) {
       // likes 프로퍼티가 없거나 좋아요한 영화가 아닌 경우
       db.collection("user").updateOne(
         { username: userId },
-        { $push: { likes: movieId } },
+        { $push: { movieLikes: movieId } },
         (err) => {
           if (err) {
             console.log(err);
@@ -136,7 +136,7 @@ router.post("/:id/like", (req, res) => {
     } else {
       db.collection("user").updateOne(
         { username: userId },
-        { $pull: { likes: movieId } },
+        { $pull: { movieLikes: movieId } },
         (err) => {
           if (err) {
             console.log(err);

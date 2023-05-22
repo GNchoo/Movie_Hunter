@@ -42,4 +42,20 @@ router.delete("/", (req, res) => {
   });
 });
 
+router.get("/like", (req, res) => {
+  const id = req.query.id;
+  const db = mongodb.getDB();
+
+  db.collection("user").findOne({ username: id }, (err, result) => {
+    if (err) {
+      return console.log(err);
+    }
+    if (result && result.likes && Array.isArray(result.likes)) {
+      res.send(result.likes);
+    } else {
+      res.send([]);
+    }
+  });
+});
+
 module.exports = router;
