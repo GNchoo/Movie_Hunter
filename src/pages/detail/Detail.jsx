@@ -359,9 +359,9 @@ const Detail = () => {
         },
       })
       .then((response) => {
-        const { isLiked } = response.data; // isLiked 값을 추출하여 사용
-        setIsLiked(isLiked);
-        console.log(response.data);
+        const user = response.data.isLiked;
+        setIsLiked(user);
+        console.log(user);
       })
       .catch((error) => console.log(error));
   }, [id, userId, isLiked, isMovie]);
