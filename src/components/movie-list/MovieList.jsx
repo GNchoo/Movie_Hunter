@@ -64,7 +64,6 @@ const MovieList = (props) => {
     const getList = async () => {
       const movieResultList = [];
       const tvResultList = [];
-
       for (const movieId of movieLike) {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
@@ -93,6 +92,7 @@ const MovieList = (props) => {
 
   return (
     <div className="movie-list">
+      {/* 마이페이지 부분만 좋아요 띄우기 */}
       {window.location.href === "http://localhost:3000/mypage" ? (
         <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
           {list.map((item, i) => {
