@@ -21,7 +21,7 @@ export const tvType = {
 
 const tmdbApi = {
   getMoviesList: (type, params) => {
-    const url = "movie/" + movieType[type] + "?&language=ko-KR&region=KR";
+    const url = "movie/" + movieType[type] + `?&language=ko-KR&region=KR`;
     return axiosClient.get(url, params);
   },
   getTvList: (type, params) => {
@@ -41,11 +41,13 @@ const tmdbApi = {
     return axiosClient.get(url, params);
   },
   credits: (cate, id) => {
-    const url = category[cate] + "/" + id + "/credits?&language=ko-KR&region=KR";
+    const url =
+      category[cate] + "/" + id + "/credits?&language=ko-KR&region=KR";
     return axiosClient.get(url, { params: {} });
   },
   similar: (cate, id) => {
-    const url = category[cate] + "/" + id + "/similar?&language=ko-KR&region=KR";
+    const url =
+      category[cate] + "/" + id + "/similar?&language=ko-KR&region=KR";
     return axiosClient.get(url, { params: {} });
   },
 };

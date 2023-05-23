@@ -9,6 +9,8 @@ import "./MyInfo.scss";
 import MovieList from "../movie-list/MovieList";
 import { category, movieType, tvType } from "../../api/tmdbApi";
 
+import apiConfig from "../../api/apiConfig";
+
 const MyInfo = () => {
   const id = localStorage.getItem("id");
   const name = localStorage.getItem("name");
@@ -20,6 +22,8 @@ const MyInfo = () => {
   const [userBirth, setUserBirth] = useState(new Date());
   const [userSex, setUserSex] = useState(sex);
   const [isEditing, setIsEditing] = useState(false);
+  const [movieLike, setMovieLike] = useState([]);
+  const [tvLike, setTvLike] = useState([]);
 
   const navigate = useNavigate();
 
@@ -61,13 +65,19 @@ const MyInfo = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${ServerApi}/mypage?username=${userId}`)
-      .then((response) => {
-        console.log(response.data.movieLikes);
-        console.log(response.data.tvLikes);
-      })
-      .catch((error) => console.log(error));
+    const fetchMovieLikes = async () => {
+      try {
+        const response = await axios.get(
+          `${ServerApi}/mypage?username=${userId}`
+        );
+        setMovieLike(response.data.movieLikes);
+        setTvLike(response.data.tvLikes);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchMovieLikes();
   }, [userId]);
 
   return (
@@ -182,7 +192,6 @@ const MyInfo = () => {
           </div>
         )}
       </div>
-      <MovieList />
       <div className="container">
         <div className="section mb-3">
           <div className="section__header mb-2">
@@ -191,7 +200,7 @@ const MyInfo = () => {
           <MovieList category={category.movie} type={movieType.top_rated} />
         </div>
       </div>
-      <MovieList />
+
       <div className="container">
         <div className="section mb-3">
           <div className="section__header mb-2">
