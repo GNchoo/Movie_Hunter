@@ -7,6 +7,10 @@ import "./ChuChon.scss";
 
 import bg from "../../assets/body-bg.jpg";
 import bg2 from "../../assets/login-bg.jpg";
+
+import axios from "axios";
+import { ServerApi } from "../../api/ServerApi";
+
 const ChuChon = (props) => {
   const navigate = useNavigate();
 
@@ -49,14 +53,23 @@ const ChuChon = (props) => {
       document.removeEventListener("keyup", enterEvent);
     };
   }, [keyword, goToSearch2]);
+
   return (
     <div>
       <div className="page-header" style={{ backgroundImage: `url(${bg})` }}>
         <h2>영상 검색 & 비슷한 영상 추천</h2>
       </div>
-      <div className="login-container" style={{ backgroundImage: `url(${bg2})` }}>
+      <div
+        className="login-container"
+        style={{ backgroundImage: `url(${bg2})` }}
+      >
         <div className="movie-search">
-          <Input type="text" placeholder="키워드 입력" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+          <Input
+            type="text"
+            placeholder="키워드 입력"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
         </div>
         <div>
           <Button className="small" onClick={goToSearch}>

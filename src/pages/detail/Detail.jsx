@@ -361,7 +361,6 @@ const Detail = () => {
       .then((response) => {
         const user = response.data.isLiked;
         setIsLiked(user);
-        console.log(user);
       })
       .catch((error) => console.log(error));
   }, [id, userId, isLiked, isMovie]);

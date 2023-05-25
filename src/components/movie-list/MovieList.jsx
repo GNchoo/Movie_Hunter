@@ -10,6 +10,7 @@ import MovieCard from "../movie-card/MovieCard";
 import axios from "axios";
 import { ServerApi } from "../../api/ServerApi";
 import apiConfig from "../../api/apiConfig";
+import { useParams } from "react-router-dom";
 
 const MovieList = (props) => {
   const [items, setItems] = useState([]);
@@ -37,8 +38,8 @@ const MovieList = (props) => {
     getList();
   }, []);
 
-  const id = localStorage.getItem("id");
-  const [userId, setUserId] = useState(id);
+  const _id = localStorage.getItem("id");
+  const [userId, setUserId] = useState(_id);
   const [movieLike, setMovieLike] = useState([]);
   const [tvLike, setTvLike] = useState([]);
 
@@ -59,11 +60,16 @@ const MovieList = (props) => {
   }, [userId]);
 
   const [list, setList] = useState([]);
+  const [movieId, setMovieId] = useState([]);
+  const { category, id } = useParams();
+  const [item, setItem] = useState(null);
+  const [recommendId, setRecommendID] = useState([]);
 
   useEffect(() => {
     const getList = async () => {
       const movieResultList = [];
       const tvResultList = [];
+      const recommendResultList = [];
       for (const movieId of movieLike) {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
@@ -80,15 +86,81 @@ const MovieList = (props) => {
         tvResultList.push(data);
       }
 
-      setList([...movieResultList, ...tvResultList]);
-      console.log([...movieResultList, ...tvResultList]);
+      for (const id of recommendId) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+        );
+        const data = await response.json();
+        recommendResultList.push(data);
+      }
+
+      setList([...movieResultList, ...tvResultList, ...recommendResultList]);
     };
 
     getList();
-  }, [movieLike, tvLike]);
+  }, [movieLike, tvLike, recommendId]);
 
-  console.log(list);
-  console.log(items);
+  useEffect(() => {
+    const getDetail = async () => {
+      const response = await tmdbApi.detail(category, id, { params: {} });
+      setItem(response);
+    };
+
+    getDetail();
+    setMovieId(id);
+
+    if (window.location.href === `http://localhost:3000/movie/${id}`) {
+      const searchData = async () => {
+        try {
+          const response = await axios.get(
+            `${ServerApi}/movie/${movieId}/list`,
+            {
+              movieId,
+            }
+          );
+          setRecommendID(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      searchData();
+    }
+
+    const getList = async () => {
+      const movieResultList = [];
+      const tvResultList = [];
+      const recommendResultList = [];
+
+      for (const movieId of movieLike) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+        );
+        const data = await response.json();
+        movieResultList.push(data);
+      }
+
+      for (const tvId of tvLike) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+        );
+        const data = await response.json();
+        tvResultList.push(data);
+      }
+
+      for (const recommend of recommendId) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${recommend}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+        );
+        const data = await response.json();
+        recommendResultList.push(data);
+      }
+
+      setList([...movieResultList, ...tvResultList, ...recommendResultList]);
+    };
+
+    getList();
+  }, [category, id, movieId, movieLike, tvLike, recommendId]);
 
   return (
     <div className="movie-list">
@@ -98,7 +170,8 @@ const MovieList = (props) => {
           {list.map((item, i) => {
             if (
               props.category === "movie" &&
-              movieLike.includes(item.id.toString())
+              movieLike.includes(item.id.toString()) &&
+              !tvLike.includes(item.id.toString())
             ) {
               return (
                 <SwiperSlide key={i}>
@@ -108,7 +181,8 @@ const MovieList = (props) => {
             }
             if (
               props.category === "tv" &&
-              tvLike.includes(item.id.toString())
+              tvLike.includes(item.id.toString()) &&
+              !movieLike.includes(item.id.toString())
             ) {
               return (
                 <SwiperSlide key={i}>
@@ -118,11 +192,32 @@ const MovieList = (props) => {
             }
             return null;
           })}
-          {items.every(
-            (item) =>
-              !movieLike.includes(item.id.toString()) &&
-              !tvLike.includes(item.id.toString())
-          ) && <p>좋아요 한 내역이 없습니다.</p>}
+          {list.every((item) => {
+            const itemId = item.id.toString();
+            return !movieLike.includes(itemId) && !tvLike.includes(itemId);
+          }) && <p>좋아요 한 내역이 없습니다.</p>}
+        </Swiper>
+      ) : window.location.href === `http://localhost:3000/movie/${id}` ? (
+        <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
+          {list.map((item, i) => {
+            if (
+              props.category === "movie" &&
+              recommendId.includes(item.id.toString())
+            ) {
+              return (
+                <SwiperSlide key={i}>
+                  <MovieCard item={item} category={props.category} />
+                </SwiperSlide>
+              );
+            }
+            return null;
+          })}
+          {list.every((item) => {
+            const itemId = item.id.toString();
+            return (
+              !recommendId.includes(itemId) && !recommendId.includes(itemId)
+            );
+          }) && <p>최신 영화입니다.</p>}
         </Swiper>
       ) : (
         <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
