@@ -7,22 +7,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from ast import literal_eval
 from sklearn.metrics.pairwise import cosine_similarity
 from fastapi.encoders import jsonable_encoder
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
-# origins = [
-#     "http://localhost:3000",
-#     "localhost:3000"
-# ]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"]
-# )
 
 
 
@@ -95,8 +81,8 @@ def find_sim_movie(df, sorted_idx, title_name, top_list=10):
 #     return movie_recommand['title'].to_list()
 
 
-@app.get("/recommand_movie_list/{title}")
-async def find_sim_movie_api(title):
+@app.get("/recommand_movie_list")
+async def find_sim_movie_api(title: str=""):
     df = movies_df
     sorted_idx = genre_sim_sorted
     top_list = 10
@@ -127,3 +113,4 @@ async def find_sim_movie_api(title):
     #print(len(results_dict['Results']))    
     results_dict = jsonable_encoder(results_dict)
     return results_dict
+

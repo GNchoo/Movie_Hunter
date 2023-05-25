@@ -11,7 +11,7 @@ db = client['Movie']
 collection = db['movieInfo']
 
 # CSV 파일 경로
-csv_file = 'tmdbData.csv'
+csv_file = 'data/tmdbData.csv'
 
 # CSV 파일 열기
 with open(csv_file, 'r',encoding='utf8') as file:
