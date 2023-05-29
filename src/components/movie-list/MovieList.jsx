@@ -22,10 +22,8 @@ const MovieList = (props) => {
 
       if (props.type !== "similar") {
         switch (props.category) {
-          case category.movie:
-            response = await tmdbApi.getMoviesList(props.type, {
-              params,
-            });
+          case "movie":
+            response = await tmdbApi.getMoviesList(props.type, { params });
             break;
           default:
             response = await tmdbApi.getTvList(props.type, { params });
@@ -37,6 +35,8 @@ const MovieList = (props) => {
     };
     getList();
   }, []);
+
+  console.log(props.category);
 
   const _id = localStorage.getItem("id");
   const [userId, setUserId] = useState(_id);
@@ -62,11 +62,10 @@ const MovieList = (props) => {
   const [list, setList] = useState([]);
   const [movieId, setMovieId] = useState([]);
   const { category, id } = useParams();
-  const [item, setItem] = useState(null);
   const [recommendId, setRecommendID] = useState([]);
 
   useEffect(() => {
-    const getList = async () => {
+    const getMyLists = async () => {
       const movieResultList = [];
       const tvResultList = [];
       const recommendResultList = [];
@@ -97,16 +96,10 @@ const MovieList = (props) => {
       setList([...movieResultList, ...tvResultList, ...recommendResultList]);
     };
 
-    getList();
+    getMyLists();
   }, [movieLike, tvLike, recommendId]);
 
   useEffect(() => {
-    const getDetail = async () => {
-      const response = await tmdbApi.detail(category, id, { params: {} });
-      setItem(response);
-    };
-
-    getDetail();
     setMovieId(id);
 
     if (window.location.href === `http://localhost:3000/movie/${id}`) {
@@ -119,7 +112,6 @@ const MovieList = (props) => {
             }
           );
           setRecommendID(response.data);
-          console.log(response.data);
         } catch (error) {
           console.log(error);
         }

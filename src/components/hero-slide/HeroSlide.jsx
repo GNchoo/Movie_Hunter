@@ -26,7 +26,6 @@ const HeroSlide = () => {
           params,
         });
         setMovieItems(response.results.slice(1, 5)); // 슬라이드 몇개까지 나타낼지 입력
-        console.log(response);
       } catch {
         console.log("error");
       }

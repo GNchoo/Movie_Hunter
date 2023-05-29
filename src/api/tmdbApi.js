@@ -21,7 +21,7 @@ export const tvType = {
 
 const tmdbApi = {
   getMoviesList: (type, params) => {
-    const url = "movie/" + movieType[type] + `?&language=ko-KR&region=KR`;
+    const url = "movie/" + movieType[type] + "?&language=ko-KR&region=KR";
     return axiosClient.get(url, params);
   },
   getTvList: (type, params) => {
