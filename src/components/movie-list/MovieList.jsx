@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./movie-list.scss";
 
 import { SwiperSlide, Swiper } from "swiper/react";
-import tmdbApi, { category } from "../../api/tmdbApi";
+import tmdbApi from "../../api/tmdbApi";
 import MovieCard from "../movie-card/MovieCard";
 
 import axios from "axios";
@@ -34,7 +34,7 @@ const MovieList = (props) => {
       setItems(response.results);
     };
     getList();
-  }, []);
+  }, [props.type, props.category, props.id]);
 
   const _id = localStorage.getItem("id");
   const [userId, setUserId] = useState(_id);
@@ -59,7 +59,7 @@ const MovieList = (props) => {
 
   const [list, setList] = useState([]);
   const [movieId, setMovieId] = useState([]);
-  const { category, id } = useParams();
+  const { id } = useParams();
   const [recommendId, setRecommendID] = useState([]);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const MovieList = (props) => {
       };
       getMyLists();
     }
-  }, [movieLike, tvLike, recommendId]);
+  }, [movieLike, tvLike]);
 
   useEffect(() => {
     setMovieId(id);
@@ -125,7 +125,7 @@ const MovieList = (props) => {
     };
 
     getList();
-  }, [category, id, movieId, movieLike, tvLike, recommendId]);
+  }, [id, movieId, recommendId]);
 
   return (
     <div className="movie-list">
