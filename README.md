@@ -12,14 +12,15 @@
 
 클라이언트 서버 다운후
 각각 폴더를 vscode로 실행 후
-
+```shell
 $ npm instll
-
+```
 설치 완료 후
 *서버 우선 실행
-
+```shell
 $ npm start
-
+```
 접속 주소
-
+```shell
 http://localhost:3000/
+```
