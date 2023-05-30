@@ -36,8 +36,6 @@ const MovieList = (props) => {
     getList();
   }, []);
 
-  console.log(props.category);
-
   const _id = localStorage.getItem("id");
   const [userId, setUserId] = useState(_id);
   const [movieLike, setMovieLike] = useState([]);
@@ -51,11 +49,11 @@ const MovieList = (props) => {
         );
         setMovieLike(response.data.movieLikes);
         setTvLike(response.data.tvLikes);
+        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-
     fetchMovieLikes();
   }, [userId]);
 
@@ -65,38 +63,31 @@ const MovieList = (props) => {
   const [recommendId, setRecommendID] = useState([]);
 
   useEffect(() => {
-    const getMyLists = async () => {
-      const movieResultList = [];
-      const tvResultList = [];
-      const recommendResultList = [];
-      for (const movieId of movieLike) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
-        );
-        const data = await response.json();
-        movieResultList.push(data);
-      }
+    if (movieLike !== undefined && tvLike !== undefined) {
+      const getMyLists = async () => {
+        const movieResultList = [];
+        const tvResultList = [];
 
-      for (const tvId of tvLike) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
-        );
-        const data = await response.json();
-        tvResultList.push(data);
-      }
+        for (const movieId of movieLike) {
+          const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+          );
+          const data = await response.json();
+          movieResultList.push(data);
+        }
 
-      for (const id of recommendId) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
-        );
-        const data = await response.json();
-        recommendResultList.push(data);
-      }
+        for (const tvId of tvLike) {
+          const response = await fetch(
+            `https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
+          );
+          const data = await response.json();
+          tvResultList.push(data);
+        }
 
-      setList([...movieResultList, ...tvResultList, ...recommendResultList]);
-    };
-
-    getMyLists();
+        setList([...movieResultList, ...tvResultList]);
+      };
+      getMyLists();
+    }
   }, [movieLike, tvLike, recommendId]);
 
   useEffect(() => {
@@ -120,25 +111,7 @@ const MovieList = (props) => {
     }
 
     const getList = async () => {
-      const movieResultList = [];
-      const tvResultList = [];
       const recommendResultList = [];
-
-      for (const movieId of movieLike) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
-        );
-        const data = await response.json();
-        movieResultList.push(data);
-      }
-
-      for (const tvId of tvLike) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiConfig.apiKey}&language=ko-KR&region=KR`
-        );
-        const data = await response.json();
-        tvResultList.push(data);
-      }
 
       for (const recommend of recommendId) {
         const response = await fetch(
@@ -148,7 +121,7 @@ const MovieList = (props) => {
         recommendResultList.push(data);
       }
 
-      setList([...movieResultList, ...tvResultList, ...recommendResultList]);
+      setList([...recommendResultList]);
     };
 
     getList();
@@ -162,8 +135,8 @@ const MovieList = (props) => {
           {list.map((item, i) => {
             if (
               props.category === "movie" &&
-              movieLike.includes(item.id.toString()) &&
-              !tvLike.includes(item.id.toString())
+              (!movieLike || movieLike.includes(item.id.toString())) &&
+              (!tvLike || !tvLike.includes(item.id.toString()))
             ) {
               return (
                 <SwiperSlide key={i}>
@@ -173,8 +146,9 @@ const MovieList = (props) => {
             }
             if (
               props.category === "tv" &&
+              tvLike &&
               tvLike.includes(item.id.toString()) &&
-              !movieLike.includes(item.id.toString())
+              (!movieLike || !movieLike.includes(item.id.toString()))
             ) {
               return (
                 <SwiperSlide key={i}>
@@ -184,10 +158,14 @@ const MovieList = (props) => {
             }
             return null;
           })}
-          {list.every((item) => {
-            const itemId = item.id.toString();
-            return !movieLike.includes(itemId) && !tvLike.includes(itemId);
-          }) && <p>좋아요 한 내역이 없습니다.</p>}
+          {(movieLike || tvLike) &&
+          list.some(
+            (item) =>
+              movieLike?.includes(item.id.toString()) ||
+              tvLike.includes(item.id.toString())
+          ) ? null : (
+            <p>좋아요 한 내역이 없습니다.</p>
+          )}
         </Swiper>
       ) : window.location.href === `http://localhost:3000/movie/${id}` ? (
         <Swiper grabCursor={true} spaceBetween={10} slidesPerView={"auto"}>
