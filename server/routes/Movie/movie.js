@@ -1,14 +1,12 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
+
+require("dotenv").config();
 
 // MongoDB 연결
 const mongodb = require("../../db/db");
 mongodb.connect();
-
-// router.get(`/:id`, (req, res) => {
-//   const id = parseInt(req.params.id);
-//   console.log("영화 상세페이지");
-// });
 
 // 영화 한줄평 목록
 router.get("/:id", (req, res) => {
@@ -147,6 +145,39 @@ router.post("/:id/like", (req, res) => {
         }
       );
     }
+  });
+});
+
+// AI서버에서 데이터를 받고 프론트로 보내기
+router.get("/:id/list", (req, res) => {
+  const id = req.params.id;
+  const db = mongodb.getDB();
+
+  db.collection("movieInfo").findOne({ id: id }, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error occurred");
+      return;
+    }
+
+    if (!result) {
+      // 해당 id에 대한 영화 정보가 없는 경우
+      res.status(404).send("Movie not found");
+      return;
+    }
+
+    const title = result.title;
+    axios
+      .get(process.env.AI_SERVER + `/recommand_movie_list/${title}`)
+      .then((response) => {
+        const data = response.data.Results;
+        const ids = data.map((result) => result.id);
+        res.send(ids);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error occurred");
+      });
   });
 });
 

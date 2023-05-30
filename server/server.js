@@ -8,6 +8,8 @@ require("dotenv").config();
 const passport = require("passport");
 require("./passport/passport");
 
+require("dotenv").config();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
