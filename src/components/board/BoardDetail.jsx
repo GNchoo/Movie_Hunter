@@ -2,22 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ServerApi } from "../../api/ServerApi";
 import axios from "axios";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Editor, EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import bg2 from "../../assets/login-bg.jpg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./BoardDetail.scss";
 
 const BoardDetail = () => {
   const [boardData, setBoardData] = useState({});
   const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [writer, setWriter] = useState("");
   const [views, setViews] = useState("");
+  const [text, setText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const { id } = useParams(); // useParams 훅을 이용해 URL 파라미터 값을 가져옵니다.
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // 로컬스토리지에서 사용자 정보를 가져옴
   const _id = localStorage.getItem("id");
   const [userId, setUserId] = useState(_id);
 
@@ -27,7 +27,9 @@ const BoardDetail = () => {
       .then((response) => {
         setBoardData(response.data);
         setTitle(response.data.title);
-        setText(response.data.text);
+        setEditorState(
+          EditorState.createWithContent(convertFromRaw(response.data.text))
+        );
         setWriter(response.data.writer);
         setViews(response.data.views);
       })
@@ -40,9 +42,16 @@ const BoardDetail = () => {
 
   const handleEditSubmit = (event) => {
     event.preventDefault();
+
+    if (title.trim() === "") {
+      alert("제목을 작성해주세요.");
+      return;
+    }
+
+    const contentState = editorState.getCurrentContent();
     const updatedBoardData = {
       title: title,
-      text: text,
+      text: convertToRaw(contentState),
       writer: writer,
       username: userId,
     };
@@ -65,24 +74,22 @@ const BoardDetail = () => {
       .catch((error) => console.log(error));
   };
 
-  const handlePostChange = (event, editor) => {
-    const data = editor.getData();
-    setText(data.replace(/(<([^>]+)>)/gi, ""));
+  const handlePostChange = (editorState) => {
+    setEditorState(editorState);
+    const contentState = editorState.getCurrentContent();
+    const contentPlainText = contentState.getPlainText("\u0001");
+    setText(contentPlainText);
   };
 
-  const editorConfiguration = {
-    language: "ko",
-    toolbar: ["heading", "|", "bold", "italic", "|", "undo", "redo"],
-    heading: {
-      options: [
-        { model: "paragraph", title: "본문", class: "ck-heading_paragraph" },
-      ],
-    },
+  const handleEditorStateChange = (editorState) => {
+    setEditorState(editorState);
   };
 
   const backList = (event) => {
     navigate("/board/list");
   };
+
+  console.log(boardData);
 
   return (
     <div>
@@ -90,7 +97,6 @@ const BoardDetail = () => {
         <h2>게시판</h2>
       </div>
       {isEditing ? (
-        // 수정 폼
         <div className="parent-container">
           <div className="form-container">
             <form onSubmit={handleEditSubmit}>
@@ -168,18 +174,22 @@ const BoardDetail = () => {
                 disabled={true}
                 onChange={(e) => setWriter(e.target.value)}
               />
-              <CKEditor
-                editor={ClassicEditor}
-                config={editorConfiguration}
-                data={text}
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={handleEditorStateChange}
+                wrapperClassName="board-wrapper"
+                editorClassName="board-editor"
                 onChange={handlePostChange}
               />
-              <button type="submit">수정 완료</button>
+              <div style={{ textAlign: "center" }}>
+                <button type="button" onClick={handleEditSubmit}>
+                  수정 완료
+                </button>
+              </div>
             </form>
           </div>
         </div>
       ) : (
-        // 상세 정보
         <table className="detail">
           <tbody>
             <tr>
@@ -192,10 +202,39 @@ const BoardDetail = () => {
             </tr>
             <tr>
               <td>
-                <div className="text-container">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: boardData.text }}
-                  ></div>
+                <div
+                  className="text-container"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  {boardData.text &&
+                    boardData.text.blocks &&
+                    boardData.text.blocks.length > 0 && (
+                      <div>
+                        {boardData.text.blocks.map((block, index) => {
+                          if (
+                            block.type === "atomic" &&
+                            block.entityRanges.length > 0
+                          ) {
+                            const entityKey = block.entityRanges[0].key;
+                            const imageEntity =
+                              boardData.text.entityMap[entityKey];
+                            if (
+                              imageEntity.type === "IMAGE" &&
+                              imageEntity.data
+                            ) {
+                              return (
+                                <img
+                                  key={index}
+                                  src={imageEntity.data.src}
+                                  alt={block.text}
+                                />
+                              );
+                            }
+                          }
+                          return <p key={index}>{block.text}</p>;
+                        })}
+                      </div>
+                    )}
                 </div>
               </td>
             </tr>
@@ -215,7 +254,7 @@ const BoardDetail = () => {
             marginRight: "60px",
           }}
         >
-          <span class="material-icons" onClick={backList}>
+          <span className="material-icons" onClick={backList}>
             list
           </span>
           <span onClick={backList}>목록으로</span>
@@ -233,13 +272,16 @@ const BoardDetail = () => {
                 marginRight: "10px",
               }}
             >
-              <span class="material-icons" onClick={() => setIsEditing(true)}>
+              <span
+                className="material-icons"
+                onClick={() => setIsEditing(true)}
+              >
                 edit
               </span>
               <span onClick={() => setIsEditing(true)}>수정</span>
             </div>
             <div>
-              <span class="material-icons" onClick={handleDeleteClick}>
+              <span className="material-icons" onClick={handleDeleteClick}>
                 delete
               </span>
               <span onClick={handleDeleteClick}>삭제</span>
