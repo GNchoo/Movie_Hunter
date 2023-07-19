@@ -22,5 +22,4 @@ $ npm start
 ```
 접속 주소
 ```shell
-http://localhost:3000/
-```
+http://iotsam.com
