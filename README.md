@@ -20,6 +20,3 @@ $ npm instll
 ```shell
 $ npm start
 ```
-접속 주소
-```shell
-http://iotsam.com
